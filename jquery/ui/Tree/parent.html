@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<title>Son</title>
+	<script src="../../../scripts/jquery/jquery-2.1.1.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		function getValue() {
+			return $("[name=username]").val();
+		}
+		
+		function getAssets() {
+			var result = [];
+			$(":checked[name=asset]").each(function(index, item) {
+				var ir = {
+					id : item.value,
+					name : $(item).next("label").text()
+				};
+				
+				//ir.push(item.value);
+				//ir.push($(item).next("label").text());
+				result.push(ir);
+			});
+			return result;
+		}
+		
+		$(document).ready(function() {
+			$("#choose").on("click", function() {
+				var result = getAssets();
+				var content = "";
+
+				for (var i = 0; i < result.length; i++) {
+					content += result[i].name + ", ";
+				}
+
+				alert(content);
+
+				$("#username").val(content);
+			});
+		});
+	</script>
+</head>
+<body style="border:1px solid blue;">
+	<button id="choose">选择</button>
+	资产列表
+	<input id="username" type="text" name="username" />
+	<div>
+		<input type="checkbox" name="asset" value="1" /><label>路由器1</label>
+	</div>
+	<div>
+		<input type="checkbox" name="asset" value="2" /><label>路由器2</label>
+	</div>
+	<div>
+		<input type="checkbox" name="asset" value="3" /><label>路由器3</label>
+	</div>
+</body>
+</html>

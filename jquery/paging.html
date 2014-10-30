@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Paging</title>
+	<script type="text/javascript" src="../scripts/jquery/jquery-1.11.1.js"></script>
+
+	<style>
+		thead tr, tfoot tr {
+			height: 40px;
+		}
+
+		.sub tr {
+			height: 40px;
+		}
+	</style>
+
+</head>
+<body>
+	<table border="1" cellspacing="0" style="width: 100%;height: 400px;" id="idMain">
+		<thead>
+			<tr>
+				<th>No</th>
+				<th>Name</th>
+				<th>Age</th>
+				<th>Email</th>
+				<th>Operate</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr style="border-collapse: collapse;">
+				<td colspan="5" style="vertical-align: top;padding:0px" >
+					<table class="sub" border="1" cellspacing="0" style="width: 100%;" id="idSub" cellpadding="0">
+						<tbody>
+							<tr>
+								<td style="border-left: 0px;border-top:0px;">1</td>
+								<td style="border-top:0px;">Andy</td>
+								<td style="border-top:0px;">20</td>
+								<td style="border-top:0px;">andy@gmail.com</td>
+								<td style="border-top:0px;border-right: 0px;">
+									<button type="button" class="classAdd">add</button>
+									<button type="button" class="classDelete">delete</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="5">页面</td>
+			</tr>
+		</tfoot>
+	</table>
+
+	<table border="1" cellspacing="0" style="width: 100%;height: 400px;" id="idReadFile">
+		<thead>
+			<tr>
+				<th>No</th>
+				<th>Name</th>
+				<th>Age</th>
+				<th>Email</th>
+				<th>Operate</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr style="border-collapse: collapse;">
+				<td colspan="5" style="vertical-align: top;">
+					<table class="sub" border="1" cellspacing="0" style="width: 100%;" id="idReadFileSub">
+						<tbody>
+							
+						</tbody>
+					</table>
+				</td>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="5">页面</td>
+			</tr>
+		</tfoot>
+	</table>
+</body>
+</html>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+
+		var headWidths = $("#idMain>thead>tr th");
+
+		$("#idSub>tbody>tr td").each(function(index) {
+			$(this).css("width", headWidths.eq(index).width());
+		});
+
+		// id重复,用class标记
+		$(".classAdd").on('click', function(event) {
+			var items = $("#idSub>tbody tr");
+			if (0 == items.length) return;
+
+			items.eq(items.length - 1).clone(true).insertAfter(items.eq(items.length - 1));
+			event.preventDefault();
+		});
+
+		$(".classDelete").on('click', function(event) {
+			$(this).parentsUntil("tbody").each(function() {
+				$(this).remove();
+			});
+			event.preventDefault();
+		});
+//========================================================================
+		var widths = $("#idReadFile>thead>tr th");
+
+		$.ajax({
+			url: "../resources/documents/paging.json",
+			contentType : "application/json;charset=UTF-8",
+			dataType: "json",
+			success: function(data) {
+				var pos = $("#idReadFileSub>tbody");
+				$.each(data, function(index, element) {
+					var tr = $("<tr/>").appendTo(pos);
+					var td = $("<td/>");
+					var label = $("<label/>");
+					for (var i = 0; i < element.length; i++) {
+						tr.append($("<td/>").css("width", widths.eq(i).width()).text(element[i]));
+					};
+					tr.append(td.css("width", widths.eq(widths.length - 1).width()));
+					td.append(label.attr("class", "classExchange").text("exchange"));
+				});
+			}
+		});
+alert();
+//		console.debug($(".classExchange"));
+		var trs = $("#idReadFileSub>tbody tr");
+
+		$(".classExchange").each(function(index, val) {
+			$(val).on("exchange", function(event) {
+				$("<img/>").attr("src", "../resources/images/jquery.png").appendTo($(val).text(""));
+			});
+		});
+
+		$(".classExchange").each(function(index, val) {
+			$(val).on("click", function(event) {
+				$(".classExchange").eq(index).trigger("exchange");
+			});
+		});
+	});
+</script>

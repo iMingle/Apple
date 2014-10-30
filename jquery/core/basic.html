@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jQuery Core</title>
+	<script type="text/javascript" src="../../scripts/jquery/jquery-1.11.1.js"></script>
+
+</head>
+<body>
+	<p>one</p>
+	<div><p>two</p></div>
+	<p>three</p>
+
+	<form id="myForm">
+		<input type="text">
+		<input type="text">
+		<input type="radio" name="" id="" value="man">
+		<input type="radio" name="" id="" value="woman">
+		<table>
+			<thead>
+				<tr>
+					<td>hello</td>
+				</tr>
+			</thead>
+		</table>
+	</form>
+	<form id="myForm1">
+		<input type="text">
+		<input type="text">
+		<input type="radio" name="" id="" value="man1">
+		<input type="radio" name="" id="" value="woman1">
+		<table>
+			<thead>
+				<tr>
+					<td>hello</td>
+				</tr>
+			</thead>
+		</table>
+	</form>
+</body>
+</html>
+
+<script type="text/javascript">
+	$(document).ready(function($) {
+		$("<p>jQuery Dynamic add element</p>").appendTo('body');
+		$("div > p").css('border', '1px solid blue');
+		// $(document.body).css('background', 'black');
+
+		// $(document.body).hide();
+//		$(myForm.elements).hide();
+		// alert($("input:radio", document.forms[1]).val());
+		alert($("input[type=radio]", document.forms[1]).val());
+	});
+</script>

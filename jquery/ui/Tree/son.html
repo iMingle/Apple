@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<title>Parent</title>
+	<link rel="stylesheet" href="../css/jquery-ui.min.css" media="all" />
+	<script src="../../../scripts/jquery/jquery-2.1.1.js" type="text/javascript"></script>
+	<script src="../../../scripts/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		var trees = [{
+			id : 1,
+			name : "类型1",
+			children : [{
+				id : 101,
+				name : "类型101"
+			},{
+				id : 102,
+				name : "类型102"
+			}]
+		}, {
+			id : 2,
+			name : "类型2",
+			children : [{
+				id : 201,
+				name : "类型201"
+			},{
+				id : 202,
+				name : "类型202"
+			},{
+				id : 203,
+				name : "类型203"
+			}]
+		}];
+	</script>
+</head>
+<body>
+	<div id="dialog" title="选择">
+		<iframe src="parent.html" id="assetFrame" frameborder="0" height="300px" width="100%">
+		</iframe>
+	</div>
+	<script type="text/javascript">
+		var assetChooser = {
+			
+			init : function(fn) {
+				$("#dialog").dialog({
+					autoOpen : false,
+					height : "auto",
+					width : 600,
+					close : function(event, ui ) {
+						alert(this.tagName);
+					},
+					buttons : [{
+						text : "保存",
+						click : function(event) {
+							var assets = $("#assetFrame").get(0).contentWindow.getAssets();
+							fn.call(window, assets, assets.length);
+							$("#dialog").dialog("close");
+						}
+					}]
+				});
+			},
+			
+			show : function() {
+				$("#dialog").dialog("open");
+			}
+			
+		};
+		
+	</script>
+	
+	<input type="text" name="asset" />
+	<table>
+		<tbody id="tbody">
+			
+		</tbody>
+	</table>
+	<button id="choose">选择</button>
+	
+	<select name="selparent" id="selparent">
+		<option value="0">请选择</option>
+	</select>
+	
+	<select name="selson" id="selson">
+		
+	</select>
+	
+	<script type="text/javascript">
+		function getValue() {
+			return $("[name=username]").val();
+		}
+		
+		function showAssets(assets) {
+			var value = "";
+			for(var i =0 ; i < assets.length; i++) {
+				value += assets[i].name + ",";
+				var tr = $("<tr></tr>");
+				$("<td></td>").text(assets[i].id).appendTo(tr);
+				$("<td></td>").text(assets[i].name).appendTo(tr);
+				tr.appendTo("#tbody");
+			}
+			$("[name=asset]").val(value);
+		}
+		$(document).ready(function() {
+			$("#getValue").on("click", function() {
+				//alert($("iframe").get(0).contentWindow.getValue());
+			});
+			//别人调用的
+			assetChooser.init(showAssets);
+			$("#choose").button().on("click", function(event) {
+				//$("#dialog").dialog("open");
+				assetChooser.show();
+			});
+			
+			//
+			for(var i=0; i<trees.length; i++ ) {
+				var op = $("<option/>").val(trees[i].id).text(trees[i].name);
+				op.data("item", trees[i].children);
+				op.appendTo("#selparent");
+			}
+			$("#selparent").on("change", function() {
+				var items = $(">:selected",this).data("item");
+				$("#selson").empty();
+				if(items && items.length > 0) {
+					for(var i =0; i<items.length; i++) {
+						$("<option/>").val(items[i].id).text(items[i].name).appendTo("#selson");
+					}
+				}
+
+			});
+		});
+	</script>
+</body>
+</html>

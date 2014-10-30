@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<title>JQuery实例-级联下拉框效果</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link type="text/css" rel="stylesheet" href="css/chainselect.css" />
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/chainselect.js"></script>
+	</head>
+	<body>
+		<div class="loading">
+			<p><img src="images/data-loading.gif" alt="数据装载中" /></p>
+			<p>数据装载中......</p>
+		</div>
+		<div class="car">
+			<span class="carname">
+				汽车厂商:
+				<select>
+					<option value="" selected="selected">请选择汽车厂商</option>
+					<option value="BMW">宝马</option>
+					<option value="Audi">奥迪</option>
+					<option value="VW">大众</option>
+				</select>
+				<img src="images/pfeil.gif" alt="有数据" />
+			</span>
+			<span class="cartype">
+				汽车类型:
+				<select></select>
+				<img src="images/pfeil.gif" alt="有数据" />
+			</span>
+			<span class="wheeltype">
+				车轮类型：
+				<select></select>
+			</span>
+		</div>
+		<div class="carimage">
+			<p><img src="images/img-loading.gif" alt="图片装载中" class="carloading" /></p>
+			<p><img src="" alt="汽车图片" class="carimg"/></p>
+		</div>
+	</body>
+</html>
+

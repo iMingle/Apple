@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+
+	<title>Learn DOM</title>
+	<script type="text/javascript" src="../../scripts/jquery/jquery-1.11.1.js"></script>
+
+</head>
+<body>
+	<input type="text" class="text" id="idUsername" name="username" value="mingle">
+	<ul>
+		<li id="idApple">苹果</li>
+		<li id="idOrange">柑橘</li>
+		<li id="idBanana">香蕉</li>
+	</ul>
+	<ul>
+		<li id="idCherry">樱桃</li>
+	</ul>
+</body>
+</html>
+
+<script type="text/javascript">
+		$(document).ready(function() {
+//	window.onload = function() {
+		var username = window.document.getElementById("idUsername");
+		// window.alert(username.value);
+		//window.alert(username.hasChildNodes());		//false
+		//window.alert(username.nodeName);			//INPUT
+		//window.alert(username.nodeType);			//1
+		//window.alert(username.nodeValue);			//null
+		console.debug(username);
+		window.document.getElementById("idUsername").setAttribute("value", "JinMinglei");
+		usernameArray = window.document.getElementsByName("username");
+		/*for (var i = 0; i < usernameArray.length; i++) {
+			window.alert(usernameArray.length);
+			window.alert(usernameArray[i].value);
+		}*/
+
+		/*usernameTag = window.document.getElementsByTagName("input");
+		for (var i = 0; i < usernameArray.length; i++) {
+			window.alert(usernameArray.length);
+			window.alert(usernameArray[i].value);
+		}*/
+		var appleNode = window.document.getElementById("idApple");
+		var cherryNode = window.document.getElementById("idCherry");
+
+		appleNode.onclick = function() {
+			window.document.getElementById("idApple").parentNode.replaceChild(cherryNode, appleNode);
+		}
+
+		var newElement = window.document.createElement("li");
+		newElement.setAttribute("id", "idPear");
+		var newTextElement = window.document.createTextNode("香梨");
+		newElement.appendChild(newTextElement);
+
+		window.document.getElementById("idApple").parentNode.appendChild(newElement);	//加到最后
+		window.document.getElementById("idApple").parentNode.insertBefore(newElement, appleNode);	//插入到appleNode之前
+//	}
+		});
+</script>

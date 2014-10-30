@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jQuery Selector Basic</title>
+	<script type="text/javascript" src="../../../scripts/jquery/jquery-1.11.1.js"></script>
+
+</head>
+<body>
+	<p>one</p>
+	<div><p>two</p></div>
+	<p>three</p>
+
+	<form id="myForm" class="cForm">
+		<input type="text">
+		<input type="text">
+		<input type="radio" name="" id="" value="man">
+		<input type="radio" name="woman" id="" value="woman">
+		<table>
+			<thead>
+				<tr>
+					<td id="hello">hello</td>
+				</tr>
+				<tr>
+					<td id="hello1">hello</td>
+				</tr>
+			</thead>
+		</table>
+	</form>
+</body>
+</html>
+
+<script type="text/javascript">
+	$(document).ready(function($) {
+		// alert($("*").length);
+		// alert($(".cForm > input").length);
+		// alert($("tr").length);
+		// alert($(".cForm > input"), $("tr"));
+		alert($("#myForm > table > thead > tr").length);
+		alert($("td").length);
+	});
+</script>
