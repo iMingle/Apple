@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<title>Ajax Stack Column</title>
+	<script type="text/javascript" src="../scripts/chart/3dcharts.js"></script>
+	<script type="text/javascript" src="../scripts/chart/3dplugin/serial.js"></script>
+	<script type="text/javascript" src="../scripts/jquery/jquery-1.11.1.js"></script>
+	<script type="text/javascript" src="D3Chart.js"></script>
+</head>
+<body>
+	<div id="chartdiv" style="height: 400px;width:600px;">
+	</div>
+	<button id="change">改变</button>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			
+			var cc = new D3SerialChart("#chartdiv", {
+				ajaxUrl : "datas.json",
+				theme : "defaults",
+				use3D : "true",
+				useStack : false,
+				categoryField: "year",
+				rotate : false,
+				plotAreaBorderAlpha : 0.2,
+                categoryTitle : "嘉年华",
+                valueAxesTitle : "价格",
+                graphs: [{
+                    type: "column",
+                    title: "收入",
+                    valueField: "income"
+                }, {
+                    type: "column",
+                    title: "花费",
+                    valueField: "expenses"
+                }]
+			});
+			cc.render();
+		});
+	</script>
+</body>
+</html>
