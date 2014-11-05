@@ -10,11 +10,54 @@
 </html>
 <script type="text/javascript" charset="utf-8" async defer>
 	var undefinedTest;
+	console.info("undefined variable = " + undefinedTest);
+	console.info("null == undefined : " + (null == undefined))		// true
+	console.info("null === undefined : " + (null === undefined))	// false
 
-	alert(undefinedTest);
+	console.info("---------------------------------------------");
+	console.info(this);
 
-	alert("null == undefined : " + (null == undefined))		// true
-	alert("null === undefined : " + (null === undefined))	// false
+	console.info("---------------------------------------------");
+	console.info("Number(3) = " + Number(3));						// 3
+	console.info("String(false) = " + String(false));				// "false"或使用false.toString()
+	console.info("Boolean([]) = " + Boolean([]));					// true
+	console.info("Object(3) = " + Object(3));						// new Number(3)
 
-	console.debug(this);
+	console.info("---------------------------------------------");
+	var n = 17;
+	console.info("binary_string(17) = " + n.toString(2));			// "10001"
+	console.info("octal_string(17) = 0" + n.toString(8));			// "021"
+	console.info("hex_string(17) = 0x" + n.toString(16));			// "0x11"
+
+	console.info("---------------------------------------------");
+	var num = 123456.789;
+	console.info("数字为: " + num);
+	console.info("小数后0位 = " + num.toFixed(0));					// "123457"
+	console.info("小数后2位 = " + num.toFixed(2));					// "123456.79"
+	console.info("小数后5位 = " + num.toFixed(5));					// "123456.789000"
+	console.info("指数1位 = " + num.toExponential(1));				// "1.2e+5"
+	console.info("指数3位 = " + num.toExponential(3));				// "1.235e+5"
+	console.info("有效数字4个 = " + num.toPrecision(4));			// "1.235e+5"
+	console.info("有效数字7个 = " + num.toPrecision(7));			// "123456.8"
+	console.info("有效数字10个 = " + num.toPrecision(10));			// "123456.7890"
+
+	console.info("---------------------------------------------");
+	console.info("parseInt and parseFloat test");
+	console.info("parseInt 3 blind: " + parseInt("3 blind"));		// 3
+	console.info("parseFloat  3.14 blind: " + parseFloat(" 3.14 blind"));	// 3.14
+	console.info("parseInt -12.34: " + parseInt("-12.34"));			// -12
+	console.info("parseInt 0xFF: " + parseInt("0xFF"));				// 255
+	console.info("parseFloat .1: " + parseFloat(".1"));				// 0.1
+	console.info("parseInt 0.1: " + parseInt("0.1"));				// 0
+	console.info("parseInt .1: " + parseInt(".1"));					// NaN
+	console.info("parseFloat $72: " + parseFloat("$72"));			// NaN
+
+	console.info("parseInt('11', 2进制) = " + parseInt("11", 2));	// 3
+	console.info("parseInt('FF', 16进制) = " + parseInt("FF", 16));	// 255
+	console.info("parseInt('ZZ', 36进制) = " + parseInt("ZZ", 36));	// 1295
+	console.info("parseInt('077', 8进制) = " + parseInt("077", 8));	// 63
+	console.info("parseInt('077', 10进制) = " + parseInt("077", 10));	// 77
+
+	console.info("---------------------------------------------");
+
 </script>
