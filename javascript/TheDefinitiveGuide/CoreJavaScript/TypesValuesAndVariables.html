@@ -59,5 +59,16 @@
 	console.info("parseInt('077', 10进制) = " + parseInt("077", 10));	// 77
 
 	console.info("---------------------------------------------");
+	console.info("Object Transfer Primitive Value Test");
+	console.info("function(x) {f(x)}).toString() = " + (function(x) {f(x)}).toString());
+
+	console.info("---------------------------------------------");
+	console.info("Variable Scope Test");
+	var scopeGlobal = "scopeGlobal";
+	function checkscope() {
+		scopeFunctionGlobal = "scopeFunctionGlobal";
+	}
+	console.info("scopeFunctionGlobal = " + scopeFunctionGlobal);	// not defined
+	console.info("scopeGlobal = " + scopeGlobal);
 
 </script>
