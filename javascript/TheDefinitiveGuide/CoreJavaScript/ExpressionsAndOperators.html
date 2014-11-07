@@ -5,10 +5,49 @@
 	<title>Expressions and Operators</title>
 </head>
 <body>
-	
+	<a href="javascript:void window.open()" title="">打开新窗口</a>
 </body>
 </html>
 
 <script type="text/javascript" charset="utf-8" async defer>
-	
+	console.info("'1' + 2 = " + ("1" + 2));						// 12
+	console.info("1 + {} = " + (1 + {}));						// 1[object Object]
+	console.info("true + true = " + (true + true));				// 2
+	console.info("2 + null = " + (2 + null));					// 2
+	console.info("2 + undefined = " + (2 + undefined));			// NaN
+
+	console.info("---------------------------------------------");
+	console.info("The in Operator Test");
+	var point = {x : 1, y : 2};
+	var data = [6, 7, 8];
+	console.info("'x' in point : " + ("x" in point));			// true
+
+	console.info("---------------------------------------------");
+	console.info("Evaluation Expressions Test");
+	// eval允许我们执行对上下文没有任何依赖的全局代码段
+	var geval = eval;											// 使用别名调用eval将是全局eval
+	console.info("eval('3 + 2') = " + eval("3 + 2"));			// 5, 少用
+
+	console.info("---------------------------------------------");
+	console.info("typeof Test");
+	console.info("typeof undefined = " + (typeof undefined));	// undefined
+	console.info("typeof null = " + (typeof null));				// object
+	console.info("typeof true = " + (typeof true));				// boolean
+	console.info("typeof 3|NaN = " + (typeof NaN));				// number
+	console.info("typeof func = " + (typeof eval));				// function
+	console.info("typeof Date = " + (typeof Date));				// function
+	var date = new Date();
+	console.info("typeof date = " + (typeof date));				// object
+
+	console.info("---------------------------------------------");
+	console.info("delete Test");
+	var o = {x : 1, y : 2};
+	delete o.x;
+	console.info("x in o : " + ("x" in o))							// false
+	var a = [6, 7, 8];
+	delete a[2];
+	console.info("2 in a : " + (2 in a))							// false
+	console.info("a.length = " + (a.length))						// 3
+
+
 </script>
