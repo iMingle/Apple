@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Statements</title>
+</head>
+<body>
+	
+</body>
+</html>
+
+<script type="text/javascript" charset="utf-8" async defer>
+	// console.info("before function define f(4) = " + f(4));				// error
+	var f = function(x) { return x; };
+	console.info("f(4) = " + f(4));											// 4
+
+	console.info("func(4) = " + func(4));									// 8
+	function func(x) {
+		return 2 * x;
+	}
+
+	function convert(x) {
+		switch (typeof x) {
+			case 'number':
+				return x.toString(16);
+			case 'string':
+				return '"' + x + '"';
+			default:
+				return String(x);
+		}
+	}
+	console.info("convert(2) = " + convert(2));								// 2
+
+</script>
