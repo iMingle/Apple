@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Arrays</title>
+</head>
+<body>
+	
+</body>
+</html>
+
+<script type="text/javascript" charset="utf-8" async defer>
+	var a = new Array(5);
+	a[1000] = 0;
+	console.info("a.length = " + a.length);								// 1001
+	console.info("a[0] = " + a[0]);										// undefined
+
+	var aa = [];
+	aa[1000] = 0;
+	console.info("aa.length = " + aa.length);							// 1001
+
+	console.info("---------------------------------------------");
+	var a1 = [1, 2, 3, 4, 5];
+	console.info("[1, 2, 3, 4, 5] = " + a1);							// 1,2,3,4,5
+	a1.length = 0;
+	console.info("[1, 2, 3, 4, 5] = " + a1);							// 
+
+	console.info("---------------------------------------------");
+	console.info(Array.prototype);
+
+	Array.prototype.vi = function(x) {
+		return x;
+	}
+	console.info(aa.vi(6));
+</script>
