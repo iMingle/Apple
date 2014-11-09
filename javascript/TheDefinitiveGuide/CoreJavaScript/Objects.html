@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Objects</title>
+</head>
+<body>
+	
+</body>
+</html>
+
+<script type="text/javascript" charset="utf-8" async defer>
+	// create Object 
+	var obj1 = {x : 0, y : 0};					// 对象直接量
+	var obj2 = new Date();
+	var obj3 = Object.create({x : 0, y : 0});
+
+	console.info(obj1.x);											// 0
+	console.info(obj2.getYear() + 1900);							// 2014
+	console.info(obj3.x);											// 0
+	console.info("Object.prototype = " + Object.prototype);
+	console.info(Object.prototype);
+
+	console.info("---------------------------------------------");
+	var now = new Date();
+	var point = {x : 4, y : 5};
+	console.info("date.toLocaleString : " + now.toLocaleString());
+	console.info("date.toString : " + now.toString());
+
+	function classOf(o) {
+		if (o === null) return "Null";
+		if (o === undefined) return "Undefined";
+		return Object.prototype.toString.call(o).slice(8, -1);
+	}
+
+	console.info("date' s class property : " + classOf(now));		// Date
+	console.info("point' s class property : " + classOf(point));	// Object
+	console.info("number' s class property : " + classOf(1));		// Number
+	console.info("boolean' s class property : " + classOf(true));	// Boolean
+	console.info("window' s class property : " + classOf(window));	// Window
+
+	console.info("---------------------------------------------");
+	console.info("序列化测试");
+	var o = {x : 1, y : {z : [false, null, ""]}};
+	var s = null;
+	console.info(s = JSON.stringify(o));
+	console.info(JSON.parse(s));
+</script>
