@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Queue</title>
+	<script type="text/javascript" src="../../scripts/jquery/jquery-1.11.1.js"></script>
+	<style>
+	  div { margin:3px; width:40px; height:40px;
+	        position:absolute; left:0px; top:30px; 
+	        background:green; display:none; }
+	  div.newcolor { background:blue; }
+	  span { color:red; }
+	</style>
+
+</head>
+<body>
+	<button id="show">Show Length of Queue</button>
+	<button id="start">Start</button>
+	<button id="stop">Stop</button>
+	<div></div>
+	<span></span>
+	<div></div>
+</body>
+</html>
+
+<script type="text/javascript">
+$("#show").click(function () {
+      var n = $("div").queue("fx");
+      $("span").text("Queue length is: " + n.length);
+});
+
+function runIt() {
+      $("div").show("slow");
+      $("div").animate({left:'+=200'}, 2000);
+      $("div").slideToggle(1000);
+      $("div").slideToggle("fast");
+      $("div").animate({left:'-=200'}, 1500);
+      $("div").hide("slow");
+      $("div").show(1200);
+      $("div").slideUp("normal", runIt);
+}
+runIt();
+
+$("#start").click(function () {
+      $("div").show("slow");
+      $("div").animate({left:'+=200'},5000);
+      $("div").queue(function () {
+          $(this).addClass("newcolor");
+          $(this).dequeue();
+      });
+      $("div").animate({left:'-=200'},1500);
+      $("div").queue(function () {
+          $(this).removeClass("newcolor");
+          $(this).dequeue();
+      });
+      $("div").slideUp();
+  });
+  $("#stop").click(function () {
+      $("div").queue("fx", []);
+      $("div").stop();
+  });
+</script>
