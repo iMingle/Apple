@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Extend jQuery</title>
+	<script type="text/javascript" src="../../scripts/jquery/jquery-1.11.1.js"></script>
+</head>
+<body>
+	<input type="radio" name="sex" value="男" checked="checked">
+	<input type="radio" name="sex" value="女">
+	<input type="checkbox" name="like" value="音乐" placeholder="">
+	<input type="checkbox" name="like" value="电影" placeholder="">
+	<input type="checkbox" name="like" value="读书" placeholder="">
+</body>
+</html>
+
+<script type="text/javascript">
+jQuery.fn.extend({
+	check : function() {
+		return this.each(function(index, val) {
+			 this.checked = true;
+		});
+	},
+	uncheck : function() {
+		return this.each(function(index, val) {
+			 this.checked = false;
+		});
+	}
+});
+
+jQuery.extend({
+	min: function(a, b) { return a
+< b ? a : b; },
+  	max: function(a, b) { return a >
+	b ? a : b; }
+});
+
+$(document).ready(function($) {
+	$("input[type=checkbox]").check();
+	$("input[type=radio]").uncheck();
+	console.info("(3, 4)max = " + $.max(3, 4));			// 4
+	console.info("(3, 4)min = " + $.min(3, 4));			// 3
+
+	$("input[type='checkbox']").prop("checked", function(i, val) {
+		console.info("i = " + i);
+		console.info("val = " + val);
+		return !val;
+	});
+});
+</script>

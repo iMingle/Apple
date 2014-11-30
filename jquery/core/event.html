@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Event</title>
+	<script type="text/javascript" src="../../scripts/jquery/jquery-1.11.1.js"></script>
+</head>
+<body>
+	<div id="idEvent">Event<span>&InnerEvent</span></div>
+</body>
+</html>
+
+<script type="text/javascript">
+$(document).ready(function($) {
+	$("#idEvent").on('click', "span", {name : "Mingle"}, function(event) {
+		event.preventDefault();
+		/* Act on the event */
+		console.info($(this).text());
+		console.info(event.data.name);
+	});
+
+	$(window).unload(function() {
+			alert("Bye now!");
+		}
+	);
+});
+</script>
