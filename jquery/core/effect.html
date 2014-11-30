@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Effect</title>
+	<script type="text/javascript" src="../../scripts/jquery/jquery-1.11.1.js"></script>
+</head>
+<body>
+	<p id="idShow" style="display: none">Hello</p>
+	<p id="idSlideDown" style="display: none">SlideDown</p>
+	<p id="idSlideUp">SlideUp</p>
+	<p id="idFadeIn" style="display: none">FadeIn</p>
+	<p id="idFadeOut">FadeOut</p>
+	<p id="idFadeTo">FadeTo</p>
+
+	<p id="idAnimate">animate</p>
+
+</body>
+</html>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#idShow").show(4000, function() {
+		$(this).text("Animation Done...");
+	});
+
+	$("#idSlideDown").slideDown(4000);
+	$("#idSlideUp").slideUp(4000);
+
+	$("#idFadeIn").fadeIn(4000);
+	$("#idFadeOut").fadeOut(4000);
+	$("#idFadeTo").fadeTo(4000, 0.5);
+
+	$("#idAnimate").on("click", function() {
+		$("#idAnimate").animate({
+			width: "90%",
+			height: "100%",
+			fontSize: "10em", 
+    		borderWidth: 10
+    		}, 1000, function() {
+			
+		});
+	});
+});
+</script>
