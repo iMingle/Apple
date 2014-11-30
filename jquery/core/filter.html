@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Filter</title>
+	<script type="text/javascript" src="../../scripts/jquery/jquery-1.11.1.js"></script>
+</head>
+<body>
+	<ul>
+	  <li>list item 1</li>
+	  <li>list item 2
+	    <ul>
+	      <li>list item 2-a</li>
+	      <li>list item 2-b</li>
+	    </ul>
+	  </li>
+	  <li>list item 3</li>
+	  <li>list item 4</li>
+	</ul>
+
+	<div id="idAndSelf"><p>First Paragraph</p><p>Second Paragraph</p></div>
+
+	<p id="idEnd"><span>Hello</span>,how are you?</p>
+</body>
+</html>
+
+<script type="text/javascript">
+	$('li').has('ul').css('background-color', 'red');
+	console.info($("#idAndSelf").find("p").andSelf());			// Object[div#idAndSelf, p, p]
+
+	console.info($("#idEnd"));									// Object[p#idEnd]
+	console.info($("#idEnd").find('span').end());				// Object[p#idEnd]
+
+	
+</script>
