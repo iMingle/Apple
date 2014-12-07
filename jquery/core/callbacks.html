@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jQuery Callbacks</title>
+	<script type="text/javascript" src="../../scripts/jquery/jquery-1.11.1.js"></script>
+</head>
+<body>
+	
+</body>
+</html>
+
+<script type="text/javascript">
+$(document).ready(function($) {
+	function fn1(value) {
+    	console.info(value);
+	}
+
+	function fn2(value) {
+	    // fn1("fn2 says:" + value);
+	    return false;
+	}
+
+	function fn3(value) {
+	    fn1("fn3 says:" + value);
+	    return false;
+	}
+
+	var callbacks = $.Callbacks();
+	callbacks.add(fn1);
+	// callbacks.fire("foo!");
+	callbacks.add(fn2);
+	// callbacks.fire("bar!");
+	callbacks.add(fn3);
+	callbacks.fire("tar!");
+
+});
+</script>
