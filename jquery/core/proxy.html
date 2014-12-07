@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jQuery proxy</title>
+	<script type="text/javascript" src="../../scripts/jquery/jquery-1.11.1.js"></script>
+	<style type="text/css">
+		.bigFont {
+			font-size: 48px
+		}
+	</style>
+</head>
+<body>
+	<div id="test">Click Here!</div>
+	<div id="myElement">Proxy</div>
+</body>
+</html>
+
+<script type="text/javascript">
+$(document).ready(function($) {
+	var obj = {
+	  	name: "John",
+	  	test: function() {
+	    	alert(this.name);
+	    	// $("#test").unbind("click", obj.test);
+	 	}
+	};
+
+	$("#test").on("click", jQuery.proxy(obj, "test"));			// John
+
+	// 以下代码跟上面那句是等价的:
+	$("#test").on("click", jQuery.proxy(obj.test, obj));		// John
+
+	// 可以与单独执行下面这句做个比较。
+	$("#test").on("click", obj.test);							// undefined
+
+	$("#myElement").on("click", function() {
+		// setTimeout(function() {
+		// 	console.info(this);									// this Window Object
+		// }, 2000);
+
+		setTimeout($.proxy(function() {
+			$(this).addClass('bigFont');						// this myElement Object
+		}, this), 2000);
+	});
+});
+</script>
