@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jQuery Tool</title>
+	<script type="text/javascript" src="../../scripts/jquery/jquery-1.11.1.js"></script>
+</head>
+<body>
+	<div id="idArray">
+		<div>First</div>
+		<div>First</div>
+		<div>First</div>
+		<div>Second</div>
+		<div>Third</div>
+		<div>Fourth</div>
+	</div>
+
+	<p><button type="button" id="test">Test</button></p>
+	<div id="log"></div>
+</body>
+</html>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	console.info($.support);
+
+	console.info("---------------------------------------------");
+	console.info("$.each() test");
+	$.each([1, 2, 3], function(index, val) {
+		 console.info(index + " : " + val);
+	});
+
+	console.info("---------------------------------------------");
+	console.info("$.extend() test");			// 用一个或多个其他对象来扩展一个对象，返回被扩展的对象。
+	var person = {
+		name : "JinMinglei",
+		age : 20
+	};
+
+	$.extend(true, person, {sex : "man"});
+	console.info(person);
+
+	console.info("---------------------------------------------");
+	console.info("$.grep() test");				// 使用过滤函数过滤数组元素。
+	var varGrep = $.grep([1, 2, 3], function(val, index) {
+			return val > 1;
+	});
+	console.info(varGrep);
+
+	console.info("---------------------------------------------");
+	console.info("$.makeArray() test");			// 将类数组对象转换为数组对象。
+	var varArrayObject = $("#idArray").children();
+	var varArray = $.makeArray(varArrayObject);
+	console.info(varArrayObject);
+	console.info(varArray);
+
+	console.info("---------------------------------------------");
+	console.info("$.map() test");				// 将一个数组中的元素转换到另一个数组中。
+	console.info(
+		$.map([1, 2, 3], function(item, index) {
+			return item += 4;
+		})
+	);
+
+	console.info("---------------------------------------------");
+	console.info("$.inArray() test");			// 确定第一个参数在数组中的位置，从0开始计数(如果没有找到则返回 -1 )。
+	console.info($.inArray(3, [1, 2, 3, 4, 5]));
+
+	console.info("---------------------------------------------");
+	console.info("$.toArray() test");			// 把jQuery集合中所有DOM元素恢复成一个数组。
+	console.info(varArrayObject.toArray());
+
+	console.info("---------------------------------------------");
+	console.info("$.when() test");				// 提供一种方法来执行一个或多个对象的回调函数，延迟对象通常表示异步事件。 
+	$.when($.ajax({
+		url: 'basic.html',
+		type: 'GET',
+		dataType: 'html'
+	})
+	.done(function() {
+		console.log("success");
+	})
+	.fail(function() {
+		console.log("error");
+	})
+	.always(function() {
+		console.log("complete");
+	})
+	).then(function(data, textStatus, jqXHR) {
+		console.info(textStatus);				// success
+		console.info(jqXHR.status);				// 200
+	});
+	
+	console.info("---------------------------------------------");
+	console.info("$.merge() test");				// 合并两个数组
+	console.info($.merge([0, 1, 2], [3, 4, 5]));
+
+	console.info("---------------------------------------------");
+	console.info("$.unique() test");			// 删除数组中重复元素。只处理删除DOM元素数组，而不能处理字符串或者数字数组。
+	
+	console.info("---------------------------------------------");
+	console.info("$.parseJSON() test");
+	console.info($.parseJSON('{"name" : "JinMinglei", "age" : "25"}'));
+
+	console.info("---------------------------------------------");
+	console.info("$.proxy() test");
+	var me = {
+		type: "zombie",
+		test: function(event) {
+			// Without proxy, `this` would refer to the event target
+			// use event.target to reference that element.
+			var element = event.target;
+			$(element).css("background-color", "red");
+			// With proxy, `this` refers to the me object encapsulating
+			// this function.
+			$("#log").append("Hello " + this.type + "<br>");
+			$("#test").off("click", this.test);
+		}
+	};
+
+	var you = {
+		type: "person",
+		test: function(event) {
+			$("#log").append(this.type + " ");
+			}
+	};
+
+	// Execute you.test() in the context of the `you` object
+	// no matter where it is called
+	// i.e. the `this` keyword will refer to `you`
+	var youClick = $.proxy(you.test, you);
+	// attach click handlers to #test
+	$("#test")
+	// this === "zombie"; handler unbound after first click
+	.on("click", $.proxy(me.test, me))
+	// this === "person"
+	.on("click", youClick)
+	// this === "zombie"
+	.on("click", $.proxy(you.test, me))
+	// this === "<button> element"
+	.on("click", you.test);
+	});
+</script>
