@@ -10,5 +10,46 @@
 </html>
 
 <script type="text/javascript" charset="utf-8" async defer>
-	
+function Range(from, to) {
+	this.from = from;
+	this.to = to;
+}
+
+Range.START = 10;
+
+Range.prototype = {
+	includes: function(x) {
+		return this.from <= x && x <= this.to;
+	}
+};
+
+function classof(o) {
+	return Object.prototype.toString.call(o).slice(8, -1);
+}
+
+var range = new Range(1, 9);
+console.debug(range);
+console.debug(Range.prototype);
+console.debug(Range.prototype.constructor);
+console.debug(range.constructor);
+console.debug(classof(range));
+if (Range.prototype.constructor === range.constructor) {
+	console.info("equal");								// equal
+}
+
+
+var collections;
+if (!collections) collections = {};
+
+collections.sets = (function namespace() {
+	return {
+		set: "Set"
+	};
+}());
+console.info(collections.sets.set);						// Set
+
+collections.maps = (new function namespace() {
+	this.map = "Map";
+}());
+console.info(collections.maps.map);						// Map
 </script>
