@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Regular Expressions</title>
+</head>
+<body>
+	
+</body>
+</html>
+
+<script type="text/javascript">
+var pattern = /s$/;
+var str = "apples";
+console.info(str.search(pattern));						// 5
+
+console.info("---------------------------------------------");
+pattern = /\w{2,}?/										// ?表示非贪婪匹配
+str = "a\naaa\naaa";
+console.info(str.search(pattern));						// 2
+
+console.info("---------------------------------------------");
+pattern = /(['"][^"']*\1)/;								// 1表示第一个带圆括号的子表达式
+str = "123";
+console.info(str.search(pattern));						// -1
+str = "233'123\"";
+console.info(str.search(pattern));						// 3
+
+console.info("---------------------------------------------");
+pattern = /\bjava\b/;									// \b单词的边界
+str = "		JAVA";
+console.info(str.search(pattern));						// 2
+
+console.info("---------------------------------------------");
+pattern = /\B[Ss]cript/;								// \B非单词的边界
+str = "script";
+console.info(str.search(pattern));						// -1
+str = "javascript";
+console.info(str.search(pattern));						// 4
+
+console.info("---------------------------------------------");
+pattern = /[jJ]ava([Ss]cript)?(?=\:)/;					// (?=和)之间的必须匹配,(?!和)之间的都不必匹配
+str = "javascript";
+console.info(str.search(pattern));						// -1
+str = "aaajavascript:";
+console.info(str.search(pattern));						// 3
+
+console.info("---------------------------------------------");
+pattern = /Java/g;
+var text = "JavaScript is more fun than Java!";
+var result;
+while((result = pattern.exec(text)) != null) {
+	console.info("Method '" + result[0] + "'" + " at position " +
+		result.index + "; next search begins at " + pattern.lastIndex);
+	// Method 'Java' at position 0; next search begins at 4
+	// Method 'Java' at position 28; next search begins at 32
+}
+console.info(pattern.test("JavaScript"));				// true
+console.info(pattern.test("javascript"));				// false
+</script>
