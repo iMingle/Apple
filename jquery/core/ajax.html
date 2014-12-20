@@ -11,5 +11,12 @@
 </html>
 
 <script type="text/javascript">
-	
+	var XMLHttp = null;
+
+	if(window.XMLHttpRequest) {
+		XMLHttp=new XMLHttpRequest();
+	} else if(window.ActiveXObject) {
+		XMLHttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	console.info(XMLHttp);
 </script>
