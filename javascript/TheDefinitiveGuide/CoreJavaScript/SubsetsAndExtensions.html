@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>JavaScript Subsets and Extensions</title>
+</head>
+<body>
+	
+</body>
+</html>
+
+<script type="text/javascript; version=1.7">
+console.info("const usage");
+const pi = 3.14;
+pi = 5;
+console.info(pi);
+let l = 8;
+console.info(l);
+
+console.info("---------------------------------------------");
+console.info("let usage");
+function oddsums(n) {
+	let total = 0, result = [];
+	for (let x = 1; x <= n; x++) {
+		let odd = 2 * x - 1;
+		total += odd;
+		result.push(total);
+	}
+	return result;
+}
+console.info(oddsums(5));										// [1, 4, 9, 16, 25]
+
+console.info("---------------------------------------------");
+let x = 1;
+for (let x = x + 1; x < 5; x++)
+	console.info(x);											// 2, 3, 4
+{
+	let x = x + 1;
+	console.info(x);											// NaN
+}
+console.info(x);												// 1
+
+console.info("---------------------------------------------");
+let x1 = 1, y1 = 2;
+let (x1 = x1 + 1, y1 = x1 + 2) {
+	console.info(x1 + y1);										// 5
+};
+console.info(x1 + y1);											// 3
+console.info(let (x1 = x1 + 1, y1 = x1 + 2) x1 + y1);			// 5
+
+console.info("---------------------------------------------");
+console.info("解构赋值");
+let [x, y] = [1, 2];
+console.info("x = " + x + "; y = " + y);
+
+let person = {name: "JinMinglei", age: 26};
+let {name: n, age: a} = person;
+console.info("name = " + n + "; age = " + a);
+</script>
