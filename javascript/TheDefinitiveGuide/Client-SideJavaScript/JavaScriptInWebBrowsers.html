@@ -11,5 +11,47 @@
 </html>
 
 <script>
-	
+// window.location.search来获取url中以'?'开始的部分
+var name = decodeURIComponent(window.location.search.substring(1)) || "";
+document.write("Hello " + name);
+/**
+ * 异步载入并执行一个指定URL的脚本
+ */
+function loadsync(url) {
+	var head = document.getElementByTagName("head")[0];
+	var s = document.createElement("script");
+	s.src = url;
+	head.appendChild(s);
+}
+
+/**
+ * 注册函数f，当文档载入完成时执行这个函数f
+ * 如果文档已经载入完成，尽快以异步方式执行它
+ */
+function onLoad(f) {
+	if (onLoad.loaded) {
+		window.setTimeout(f, 0);
+	} else if (window.addEventListener) {
+		window.addEventListener("load", f, false);
+	} else if (window.attachEvent) {
+		window.attachEvent("onload", f);
+	}
+}
+// 函数的变量
+onLoad.loaded = false;
+
+onLoad(function() {
+	onLoad.loaded = true;
+});
+
+/*
+window.onload = function() {
+	alert("loaded");
+}
+*/
+
+window.addEventListener("load", function() {
+	alert("loaded");
+});
+
 </script>
