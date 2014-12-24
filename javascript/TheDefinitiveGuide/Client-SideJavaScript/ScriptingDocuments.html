@@ -5,6 +5,75 @@
 	<title>Scripting Documents</title>
 </head>
 <body>
-	
+	<div id="idElement">ID</div>
+	<div name="nameElement">Name</div>
+	<div name="nameElement">Name</div>
+	<div name="nameElement">Name</div>
+	<span>Span</span>
+	<span>Span</span>
+	<image>Image</image>
+	<image>Image</image>
+	<form action="ScriptingDocuments_submit" method="get" accept-charset="utf-8">Form1</form>
+	<form action="ScriptingDocuments_submit" method="get" accept-charset="utf-8">Form2</form>
+	<a href="" title="">href1</a>
+	<a href="" title="">href2</a>
+	<embed src="" type="">Embed1</embed>
+	<embed src="" type="">Embed2</embed>
+	<div class="classElement">Class1</div>
+	<div class="classElement">Class2</div>
+	<div class="classElement classElement1">Class2</div>
+
+	<div>PreviousSibling</div>
+	<div id="idParent">
+		<div>FirstChild</div>
+		<div>MiddleChild</div>
+		<div>LastChild</div>
+	</div>
+	<div>NextSibling</div>
 </body>
 </html>
+
+<script type="text/javascript">
+console.info(document.getElementById("idElement"));
+
+console.info("---------------------------------------------");
+console.info(document.getElementsByName("nameElement"));	// NodeList[div, div, div]
+
+console.info("---------------------------------------------");
+console.info(document.getElementsByTagName("span"));		// HTMLCollection[span, span]
+console.info(document.images);								// HTMLCollection[img, img]
+console.info(document.forms);								// HTMLCollection[form Scripting...s_submit, form Scripting...s_submit]
+console.info(document.links);								// HTMLCollection[a, a]
+console.info(document.embeds);								// HTMLCollection[embed, embed]
+console.info(document.plugins);								// HTMLCollection[embed, embed]
+console.info(document.scripts);								// HTMLCollection[script]
+console.info(document.body);								// <body>
+console.info(document.head);								// <head>
+
+console.info("---------------------------------------------");
+console.info(document.getElementsByClassName("classElement"));	// HTMLCollection[div.classElement, div.classElement]
+console.info(document.getElementsByClassName("classElement classElement1"));	// HTMLCollection[div.classElement.classElement1]
+
+console.info("---------------------------------------------");
+var parent = document.querySelectorAll("#idParent")[0];
+console.info(parent);										// <div id="idParent">
+console.info(parent.parentNode);							// <body>
+console.info(parent.childNodes);
+console.info(parent.firstChild);
+console.info(parent.lastChild);
+console.info(parent.nextSibling);
+console.info(parent.previousSibling);
+console.info(parent.nodeType);
+console.info(parent.nodeValue);
+console.info(parent.nodeName);
+
+console.info("---------------------------------------------");
+console.info(parent.children);								// HTMLCollection[div, div, div]
+console.info(parent.firstElementChild);
+console.info(parent.lastElementChild);
+console.info(parent.nextElementSibling);
+console.info(parent.previousElementSibling);
+console.info(parent.childElementCount);						// 3
+
+
+</script>
