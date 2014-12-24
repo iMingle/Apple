@@ -5,7 +5,9 @@
 	<title>The Window Object</title>
 </head>
 <body>
-	<iframe id="idFrame" src=""></iframe>
+	<iframe id="idFrame" name="nameFrame" src=""></iframe>
+	<iframe id="" name="nameFrame" src=""></iframe>
+	<iframe id="" name="nameFrame" src=""></iframe>
 </body>
 </html>
 
@@ -35,6 +37,7 @@ function invoke(f, start, interval, end) {
 }
 
 console.info(window);
+console.info(window.self);
 console.info(document);
 console.info(window.location);
 console.info(document.location);
@@ -119,5 +122,25 @@ console.info("---------------------------------------------");
 console.info(document.getElementById("idFrame"));
 
 console.info("---------------------------------------------");
+// window.open();								// about:blank
+// window.open("", "_blank");					// about:blank
+// window.open("", "_top");						// 顶级祖先窗口
+// window.open("", "_parent");					// 直接父级窗口
+// var w = window.open("http://www.baidu.com");
+// console.info(w.opener);						// window对象
+// window.close();
+
+console.info("---------------------------------------------");
+var childFrame = document.getElementById("idFrame").contentWindow;
+console.info(childFrame);						// iframe的window对象
+
+console.info(window.frameElement);				// null
+console.info(childFrame.frameElement);			// <iframe id="idFrame" src="" name="nameFrame">
+
+console.info(window.frames.length);				// 3, 自身包含的窗口或窗体的子窗体
+
+// 通过ID和name可以作为window的属性访问该元素
+console.info(window.idFrame);					// <iframe id="idFrame" src="" name="nameFrame">
+console.info(window.nameFrame);					// Window about:blank
 
 </script>
