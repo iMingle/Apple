@@ -75,5 +75,46 @@ console.info(parent.nextElementSibling);
 console.info(parent.previousElementSibling);
 console.info(parent.childElementCount);						// 3
 
+console.info("---------------------------------------------");
+/**
+ * 返回Element元素e的第n层祖先
+ */
+function parent(e, n) {
+	if (n === undefined) n = 1;
 
+	while (n-- && e) {
+		e = e.parentNode;
+	}
+
+	if (!e || e.nodeType !== 1) return null;
+
+	return e;
+}
+
+/**
+ * 返回Element元素e的第n个兄弟元素
+ */
+function sibling(e, n) {
+	while (e && n !== 0) {
+		if (n > 0) {						// 查找后续的兄弟元素
+			if (e.nextElementSibling) {
+				e = e.nextElementSibling;
+			} else {
+				for (e = e.nextSibling; e && e.nodeType !== 1; e = e.nextSibling)
+					;						// 空循环
+			}
+			n--;
+		} else {							// 查找前面的兄弟元素
+			if (e.previousElementSibling) {
+				e = e.previousElementSibling;
+			} else {
+				for (e = e.previousSibling; e && e.nodeType !== 1; e = e.previousSibling)
+					;						// 空循环
+			}
+			n++;
+		}
+	}
+
+	return e;
+}
 </script>
