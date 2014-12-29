@@ -3,47 +3,26 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Handling Events</title>
+	<script src="../../../scripts/TheDefinitiveGuide/whenReady.js" type="text/javascript" charset="utf-8" async defer></script>
+	<script src="../../../scripts/TheDefinitiveGuide/getScrollOffsets.js" type="text/javascript" charset="utf-8" async defer></script>
+	<script src="../../../scripts/TheDefinitiveGuide/Drag.js" type="text/javascript" charset="utf-8" async defer></script>
+	<script src="../../../scripts/TheDefinitiveGuide/Enclose.js" type="text/javascript" charset="utf-8" async defer></script>
+	<script type="text/javascript">
+whenReady(function() {
+	enclose(document.getElementById("idContent"), 300, 400, -200, -300);
+});
+</script>
+	<style type="text/css" media="screen">
+		div.enclosure {
+			border: solid black 10px;
+			margin: 10px;
+		}
+	</style>
 </head>
 <body>
-	
+	<img src="../../../resources/images/beautiful0.jpg" style="position: absolute; left: 100px; top: 100px;" alt="Guess" onmousedown="if (event.shiftKey) drag(this, event);">
+	<img src="../../../resources/images/beautiful1.jpg" style="position: absolute; left: 400px; top: 100px;" alt="Guess" onmousedown="if (event.shiftKey) drag(this, event);">
+	<img id="idContent" src="../../../resources/images/beautiful2.jpg" style="position: absolute; left: 800px; top: 100px;" alt="Guess">
 </body>
 </html>
 
-<script type="text/javascript">
-/**
- * 当文档准备就绪时调用函数
- */
-var whenReady = (function() {
-	var funcs = [];							// 当获取事件时，要调用的函数
-	var ready = false;
-
-	function handler(e) {
-		if (ready) return;
-
-		if (e.type === "readystatechange" && document.readyState !== "complete") {
-			return;
-		}
-
-		for (var i = 0; i < funcs.length; i++) {
-			funcs[i].call(document);
-		}
-
-		ready = true;
-		funcs = null;
-	}
-
-	if (document.addEventListener) {
-		document.addEventListener("DOMContentLoaded", handler, false);
-		document.addEventListener("readystatechange", handler, false);
-		window.addEventListener("load", handler, false);
-	} else if (document.attachEvent) {
-		document.attachEvent("readystatechange", handler);
-		window.attachEvent("load", handler);
-	}
-
-	return function whenReady(f) {
-		if (ready) f.call(document);
-		else funcs.push(f);
-	};
-}());
-</script>
