@@ -8,3 +8,257 @@
 	
 </body>
 </html>
+
+<script type="text/javascript">
+/**
+ * 用POST方法发送纯文本给服务器
+ */
+function postMessage(msg) {
+	var request = new XMLHttpRequest();
+
+	request.open("POST", "/TheWindowObject.html");
+
+	request.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
+
+	request.send(msg);
+}
+
+/**
+ * 获取HTTP响应的onreadystatechange
+ */
+function getText(url, callback) {
+	var request = new XMLHttpRequest();
+
+	request.open("GET", url);
+	request.onreadystatechange = function() {
+		if (request.readyState === 4 && request.status === 200) {
+			var type = request.getResponseHeader("Content-Type");
+			if (type.match(/^text/)) {
+				callback(request.responseText);
+			}
+		}
+	};
+
+	request.send(null);
+}
+
+/**
+ * 发起同步的HTTP请求
+ */
+function getTextSync(url) {
+	var request = new XMLHttpRequest();
+
+	request.open("GET", url, false);
+	request.send(null);
+
+	if (request.status !== 200) {
+		throw new Error(request.statusText);
+	}
+
+	var type = request.getResponseHeader("Content-Type");
+	if (!type.match(/^text/)) {
+		throw new Error("Expected textual response;got: " + type);
+	}
+
+	return request.responseText;
+}
+
+/**
+ * 解析HTTP响应
+ */
+function get(url, callback) {
+	var request = new XMLHttpRequest();
+
+	request.open("GET", url);
+	request.onreadystatechange = function() {
+		if (request.readyState === 4 && request.status === 200) {
+			var type = request.getResponseHeader("Content-Type");
+			if (type.indexOf("xml") !== -1 && request.responseXML) {
+				callback(request.responseXML);					// Document对象
+			} else if (type === "application/json") {
+				callback(JSON.parse(request.responseText));		// json响应
+			} else {
+				callback(request.responseText);					// 字符串响应
+			}
+		}
+	};
+
+	request.send(null);
+}
+
+/**
+ * 用于HTTP请求的编码对象
+ */
+function encodeFromData(data) {
+	if (!data) return "";
+	var pairs = [];												// 保存名=值对
+
+	for (var name in data) {
+		if (!data.hasOwnProperty(name)) continue;				// 跳过继承属性
+		if (typeof data[name] === "function") continue;			// 跳过方法
+		var value = data[name].toString();
+		name = encodeURIComponent(name.replace("%20", "+"));	// 编码名字
+		value = encodeURIComponent(value.replace("%20", "+"));	// 编码值
+		pairs.push(name + "=" + value);
+	}
+
+	return pairs.join("&");
+}
+
+/**
+ * 使用表单编码数据发起一个HTTP POST请求
+ */
+function postData(url, data, callback) {
+	var request = new XMLHttpRequest();
+
+	request.open("POST", url);
+	request.onreadystatechange = function() {
+		if (request.readyState === 4 && callback) {
+			callback(request);
+		}
+	};
+
+	request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	request.send(encodeFromData(data));
+}
+
+/**
+ * 使用表单编码数据发起一个HTTP GET请求
+ */
+function getData(url, data, callback) {
+	var request = new XMLHttpRequest();
+
+	request.open("GET", url + "?" + encodeFromData(data));
+	request.onreadystatechange = function() {
+		if (request.readyState === 4 && callback) {
+			callback(request);
+		}
+	};
+
+	request.send(null);
+}
+
+/**
+ * 使用JSON编码数据发起一个HTTP POST请求
+ */
+function postData(url, data, callback) {
+	var request = new XMLHttpRequest();
+
+	request.open("POST", url);
+	request.onreadystatechange = function() {
+		if (request.readyState === 4 && callback) {
+			callback(request);
+		}
+	};
+
+	request.setRequestHeader("Content-Type", "json");
+	request.send(JSON.stringify(data));
+}
+
+/**
+ * 使用XML文档作为其主体的HTTP POST请求
+ * 在XML中编码什么东西，在哪儿和半径
+ */
+function postQuery(url, what, where, radius, callback) {
+	var request = new XMLHttpRequest();
+
+	request.open("POST", url);
+	request.onreadystatechange = function() {
+		if (request.readyState === 4 && callback) {
+			callback(request);
+		}
+	};
+
+	// Create an XML document with root element <query>
+	var doc = document.implementation.createDocument("", "query", null);
+	var query = doc.documentElement;							// <query>元素
+	var find = doc.createElement("find");
+	query.appendChild(find);
+	find.setAttribute("zipcode", where);
+	find.setAttribute("radius", radius);
+	find.appendChild(doc.createTextNode(what));
+
+	// 注意将自动设置Content-Type头
+	request.send(doc);
+}
+
+/**
+ * 使用HTTP POST请求上传文件
+ */
+whenReady(function() {
+	var elts = document.getElementsByTagName("input");
+	for (var i = 0; i < elts.length; i++) {
+		var input = elts[i];
+		if (input.type !== "file") continue;
+		var url = input.getAttribute("data-uploadto");
+		if (!url) continue;
+
+		input.addEventListener("change", function() {
+			var file = this.files[0];					// 假设单个文件选择
+			if (!file) return;
+			var xhr = new new XMLHttpRequest();
+			xht.open("POST", url);
+			xhr.send(file);
+		}, false);
+	}
+});
+
+/**
+ * 使用POST方法发送multipart/form-data请求主体，同时包含文件上传元素和其他元素时使用该类型
+ */
+function postFormData(url, data, callback) {
+	if (typeof FormData === "undefined")
+		throw new Error("FormData is not inplemented");
+
+	var request = new XMLHttpRequest();
+
+	request.open("POST", url);
+	request.onreadystatechange = function() {
+		if (request.readyState === 4 && callback) {
+			callback(request);
+		}
+	};
+
+	var formdata = new FormData();
+	for (var name in data) {
+		if (!data.hasOwnProperty(name)) continue;			// 跳过继承的属性
+		var value = data[name];
+		if (typeof value === "function") continue;			// 跳过方法
+		formdata.append(name, value);
+	}
+
+	// 在multipart/form-data请求主体中发送名/值对
+	// 每对都是请求的一个部分，注意，当传入FormData对象时send()方法会自动设置Content-Type头
+	request.send(formdata);
+}
+
+/**
+ * 监控HTTP上传进度
+ */
+whenReady(function() {
+	var elts = document.getElementsByClassName("fileDropTarget");
+	for (var i = 0; i < elts.length; i++) {
+		var target = elts[i];
+		var url = target.getAttribute("data-uploadto");
+		if (!url) continue;
+		createFileUploadDropTarget(target, url);
+	}
+		
+	function createFileUploadDropTarget(target, url) {
+		// 跟踪当前是否正在上传，因此我们能拒绝放下
+		// 我们可以处理多个并发上传
+		// 但对这个例子使用进度通知太困难了
+		var uploading = false;
+
+		target.ondragenter = function(e) {
+			console.info("dragenter");
+			if (uploading) return;
+			var types = e.dataTransfer.types;
+			if (types && ((types.contains && types.contains('Files')) || (types.indexOf && types.indexOf("Files") !== -1))) {
+				target.classList.add("wantdrop");
+				return false;
+			}
+		};
+	}
+});
+</script>
