@@ -243,7 +243,7 @@ whenReady(function() {
 		if (!url) continue;
 		createFileUploadDropTarget(target, url);
 	}
-		
+	
 	function createFileUploadDropTarget(target, url) {
 		// 跟踪当前是否正在上传，因此我们能拒绝放下
 		// 我们可以处理多个并发上传
@@ -308,4 +308,66 @@ whenReady(function() {
 		};
 	}
 });
+
+/**
+ * 实现超时
+ * 发起HTTP GET请求获取指定URL的内容
+ * 如果响应成功到达，传入responseText给回调函数
+ * 如果响应在timeout毫秒内没有到达，中止这个请求
+ */
+function timedGetText(url, timeout, callback) {
+	var request = new XMLHttpRequest();				// 创建新请求
+	var timedout = false;							// 是否超时
+	// 启动计时器，在timeout毫秒后将中止请求
+	var timer = setTimeout(function() {				// 如果触发，启动一个计时器
+		timedout = true;
+		request.abort();							// 中止请求
+	}, timeout);									// 中止请求之前的时长
+	request.open("GET", url);
+	request.onreadystatechange = function() {
+		if (request.readyState !== 4) return;		// 忽略未完成的请求
+		if (timedout) return;						// 忽略中止请求
+		clearTimeout(timer);						// 取消等待的超时
+		if (request.status === 200) {				// 如果请求成功
+			callback(request.responseText);
+		}
+	};
+	request.send(null);
+}
+
+/**
+ * 使用script元素发送JSONP请求
+ * 根据指定的URL发送一个JSONP请求
+ * 然后把解析得到的响应数据传递给回调函数
+ * 在URL中添加一个名为jsonp的查询参数，用于指定该请求的回调函数的名称
+ */
+function getJSONP(url, callback) {
+	// 为本次请求创建一个唯一的回调函数名称
+	var cbnum = "cb" + getJSONP.counter++;
+	var cbname = "getJSONP." + cbnum;
+
+	if (url.indexOf("?") === -1) {					// URL没有查询部分
+		url += "?jsonp=" + cbname;
+	} else {
+		url += "&jsonp=" + cbname;
+	}
+
+	// 创建script元素用于发送请求
+	var script = document.createElement("script");
+	// 定义将被脚本执行的回调函数
+	getJSONP[cbnum] = function(response) {
+		try {
+			callback(response);
+		} finally {
+			delete getJSONP[cbnum];
+			script.parentNode.removeChild(script);	// 移除script元素
+		}
+	};
+
+	// 立即触发HTTP请求
+	script.src = url;
+	document.body.appendChild(script);
+}
+
+getJSONP.counter = 0;
 </script>
