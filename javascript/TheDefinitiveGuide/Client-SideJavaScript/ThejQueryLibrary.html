@@ -3,8 +3,29 @@
 <head>
 	<meta charset="UTF-8">
 	<title>The jQuery Library</title>
+	<script type="text/javascript" src="../../../scripts/jquery/jquery-1.11.1.js"></script>
 </head>
 <body>
-	
+	<div id="idPosition">Position</div>
 </body>
 </html>
+
+<script type="text/javascript">
+$(function() {
+	var bodyscripts = $("script", document.body);
+	console.info(bodyscripts.selector);					// script
+	console.info(bodyscripts.context);					// <body>
+	console.info(bodyscripts.jquery);					// 1.11.1
+
+	console.info("---------------------------------------------");
+	var elt = $("#idPosition");
+	var position = elt.offset();						// 相对于文档元素
+	console.info(position);								//  Object { top=8, left=8}
+	elt.offset(position);
+	elt.offset(function() {
+		return {top: 10, left: 10};
+	});
+
+
+});
+</script>
