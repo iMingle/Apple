@@ -7,6 +7,11 @@
 </head>
 <body>
 	<div id="idPosition">Position</div>
+	<div id="idData">Data Function</div>
+	<div id="idWrap">Wrap Element</div>
+	<div id="idImage"></div>
+	<div id="idBindEvent">Bind Event</div>
+	<button id="idTrigger" type="button">Trigger Event</button>
 </body>
 </html>
 
@@ -26,6 +31,45 @@ $(function() {
 		return {top: 10, left: 10};
 	});
 
+	console.info("---------------------------------------------");
+	$("#idData").data('x', '1');
+	console.info($("#idData").data('x'));				// 1
+	$("#idData").removeData('x');
+	console.info($("#idData").data('x'));				// undefined
 
+	$.data(document.getElementById("idData"), 'x', '2');
+	console.info($("#idData").data('x'));				// 2
+
+	console.info("---------------------------------------------");
+	$("#idWrap").wrap('<div class="out-wrapper"></div>');
+	$("#idWrap").wrapInner('<div class="in-wrapper"></div>');
+
+	console.info("---------------------------------------------");
+	$(window).resize(function(event) {
+		console.info("I am resizing!");
+	});
+
+	$("<img/>", {
+		src: "../../../resources/images/beautiful0.jpg",
+		alt: "image description",
+		click: function() {
+			$(this).css('opacity', '20%').css('border', 'solid black 6px');
+		}
+	}).appendTo($("#idImage"));
+
+	console.info("---------------------------------------------");
+	$("#idBindEvent").bind('mouseenter', "data", function(event) {
+		$(this).css('color', 'red');
+		console.info(event.data);
+	});
+
+	$("#idTrigger").click(function(event) {
+		$.event.trigger('event');
+		window.location = "./DigitalClock.html";
+	});
+
+	console.info("---------------------------------------------");
+
+	console.info("---------------------------------------------");
 });
 </script>
