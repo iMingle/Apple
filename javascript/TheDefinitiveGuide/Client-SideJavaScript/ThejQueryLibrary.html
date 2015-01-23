@@ -11,7 +11,13 @@
 	<div id="idWrap">Wrap Element</div>
 	<div id="idImage"></div>
 	<div id="idBindEvent">Bind Event</div>
-	<button id="idTrigger" type="button">Trigger Event</button>
+	<div>
+		<button id="idTrigger" type="button">Trigger Event</button>
+	</div>
+	<div>
+		<button id="idEventNamespace" type="button">EventType has namespace</button>
+	</div>
+	<div id="idNotExist"></div>
 </body>
 </html>
 
@@ -67,6 +73,22 @@ $(function() {
 		$.event.trigger('event');
 		window.location = "./DigitalClock.html";
 	});
+
+	$("#idEventNamespace").bind('click.ns', "eventData", function(event) {
+		console.info($(this).text());
+	});
+
+	$("#idEventNamespace").trigger('click.ns');
+	
+	$(".notExist").bind('click', "eventData", function(event) {			// not bind
+		console.info("Bind event to the element created dynamic");
+	});
+
+	$(document).delegate('.notExist', 'click', function(event) {		// binded
+		console.info("Delegate event to the element created dynamic");
+	});
+
+	$("<div/>").addClass('notExist').text('Dynamic created').appendTo('#idNotExist');
 
 	console.info("---------------------------------------------");
 
