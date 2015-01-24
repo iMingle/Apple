@@ -18,6 +18,13 @@
 		<button id="idEventNamespace" type="button">EventType has namespace</button>
 	</div>
 	<div id="idNotExist"></div>
+	<div id="idFadeIn">Fade In</div>
+	<div id="idFadeOut">Fade Out</div>
+	<div id="idFadeInOut">Fade In Out</div>
+	<div id="idAnimate">Animate</div>
+	<!-- 缓动函数 -->
+	<div id="idEasing">Easing Function</div>
+	<div id="idAjaxLoad"></div>
 </body>
 </html>
 
@@ -91,7 +98,56 @@ $(function() {
 	$("<div/>").addClass('notExist').text('Dynamic created').appendTo('#idNotExist');
 
 	console.info("---------------------------------------------");
+	$("#idFadeIn").hide();
+/*	
+	$("#idFadeIn").fadeIn(3000, function() {
+		$(this).text('Faded In End');
+	});
+*/
+	$("#idFadeIn").fadeIn({
+		duration: 3000,
+		complete: function() {
+			$(this).text('Faded In End');
+		}
+	});
+
+	$("#idFadeOut").fadeOut(3000, function() {
+		$(this).text('Faded Out End');
+	});
+
+	$("#idFadeInOut").fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn();
+
+	$("#idAnimate").animate({
+		"opacity": .25,
+		"font-size": 10											// 有'-'必须加上引号
+	}, {
+		duration: 3000,
+		complete: function() {
+			$(this).text('Animate End');
+		}
+	});
+
+	$("#idEasing").animate({"font-size": "+=5"}, {duration: 10000, easing: "swing"});	// 正弦函数
 
 	console.info("---------------------------------------------");
+	$("#idAjaxLoad").load('./ThejQueryAjaxServer.html #idAjaxLoad');
+	$("#idAjaxLoad").load('./ThejQueryAjaxServer.html', "name=mingle");					// GET
+	$("#idAjaxLoad").load('./ThejQueryAjaxServer.html', {name: "mingle", age: 26});		// POST
+
+	$.getScript("../../../scripts/TheDefinitiveGuide/jqueryAjaxGetScript.js", function() {
+		console.info("5 + 5 = " + add(5, 5));
+	});
+
+	$.getScript("../../../scripts/TheDefinitiveGuide/jqueryAjaxGetScript.js").done(function(script, textStatus) {
+		console.info(textStatus);						// success
+	}).fail(function(jqxhr, settings, exception) {
+		console.info("Triggered ajaxError handler.");
+	});
+
+	$.getJSON('../../../resources/documents/jqueryAjax.json', {person: 'x-man'}, function(json, textStatus) {
+		console.info(json);								//  Object { name="mingle", age="26"}
+		console.info(textStatus);						// success
+	});
+
 });
 </script>
