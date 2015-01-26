@@ -8,6 +8,10 @@
 <body>
 	<div id="idLocation"></div>
 	<div id="idLocationDetail"></div>
+    <div>
+        <img src="../../../resources/images/beautiful0.jpg" alt="Guess" onclick="smear(this)">
+    </div>
+    <input type="file" accept="./*" multiple onchange="fileinfo(this.files)">
 </body>
 </html>
 
@@ -101,12 +105,70 @@ function whereami(elt) {
     }
 }
 
+// Asynchronously replace the contents of the image with a smeared version.
+// Use it like this: <img src="testimage.jpg" onclick="smear(this)"/>
+function smear(img) {
+    // Create an offscreen <canvas> the same size as the image
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    // Copy the image into the canvas, then extract its pixels
+    var context = canvas.getContext("2d");
+    context.drawImage(img, 0, 0);
+    var pixels = context.getImageData(0,0,img.width,img.height);
+
+    // Send the pixels to a worker thread
+    var worker = new Worker("../../../scripts/TheDefinitiveGuide/SmearWorker.js");      // Create worker
+    worker.postMessage(pixels);                     // Copy and send pixels
+
+    // Register a handler to get the worker's response
+    worker.onmessage = function(e) {
+        var smeared_pixels = e.data;                // Pixels from worker
+        context.putImageData(smeared_pixels, 0, 0); // Copy them to the canvas
+        img.src = canvas.toDataURL();               // And then to the img
+        worker.terminate();                         // Stop the worker thread
+        canvas.width = canvas.height = 0;           // Don't keep pixels around
+    }
+}
+
+// 输出选中的文件列表中相关的信息
+function fileinfo(files) {
+    for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        console.info(file.name, file.size, file.type, file.lastModifiedDate);
+    }
+}
+
 $(function() {
 	$("#idLocation").append(getmap());
 
 	var div = document.createElement(div);
 	$("#idLocationDetail").append(div);
 	whereami(div);	// At 2015/1/25 下午6:32:39 you were within 32 meters of latitude 40.0750879 longitude 116.4131011.
+
+    var bytes = new Uint8Array(4);
+    for (var i = 0; i < bytes.length; i++) {
+        bytes[i] = i & 0xFF;
+    }
+
+    for (var i = 0; i < bytes.length; i++) {
+        console.info(bytes[i]);
+    }
+
+    console.info(bytes.buffer);                     // ArrayBuffer {}
+    console.info(bytes.byteOffset);                 // 0
+    console.info(bytes.length);                     // 4
+
+    var buf = new ArrayBuffer(1024);
+    var asbytes = new Uint8Array(buf);
+    for (var i = 0; i < asbytes.length; i++) {
+        asbytes[i] = i & 0xFF;
+    }
+
+    var view = DataView(buf);
+    console.info(view.getInt8(2));                  // 2
+
 
 });
 </script>
