@@ -8,10 +8,10 @@
 	<script src="../../../scripts/TheDefinitiveGuide/Drag.js" type="text/javascript" charset="utf-8" async defer></script>
 	<script src="../../../scripts/TheDefinitiveGuide/Enclose.js" type="text/javascript" charset="utf-8" async defer></script>
 	<script type="text/javascript">
-whenReady(function() {
-	enclose(document.getElementById("idContent"), 300, 400, -200, -300);
-});
-</script>
+	whenReady(function() {
+		enclose(document.getElementById("idContent"), 300, 400, -200, -300);
+	});
+	</script>
 	<style type="text/css" media="screen">
 		div.enclosure {
 			border: solid black 10px;
@@ -21,7 +21,9 @@ whenReady(function() {
 </head>
 <body>
 	<img src="../../../resources/images/beautiful0.jpg" style="position: absolute; left: 100px; top: 100px;" alt="Guess" onmousedown="if (event.shiftKey) drag(this, event);">
+
 	<img src="../../../resources/images/beautiful1.jpg" style="position: absolute; left: 400px; top: 100px;" alt="Guess" onmousedown="if (event.shiftKey) drag(this, event);">
+	
 	<img id="idContent" src="../../../resources/images/beautiful2.jpg" style="position: absolute; left: 800px; top: 100px;" alt="Guess">
 </body>
 </html>
