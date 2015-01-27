@@ -325,6 +325,112 @@ $(function() {
     }
     /* 用Blob URL来显示一个拖放的图片文件 End */
 
+    /* 使用异步文件系统API Start */
+    function logerr(e) {
+        console.info(e);
+    }
 
+    var filesystem;
+
+    requestFileSystem(PERSISTENT,                   // 临时文件系统
+        10 * 1024 * 1024,                           // 10M
+        function(fs) {
+            filesystem = fs;                        // 将文件系统保存到一个全局变量中
+    }, logerr);
+
+    /**
+     * 以文本形式读取指定文件的内容，并将他们传递给回调函数
+     */
+    function readTextFile(path, callback) {
+        // 根据指定的文件名，调用getFile()获取相应的FileEntry对象
+        filesystem.root.getFile(path, function(entry) {
+            entry.file(function(file) {
+                var reader = new FileReader();
+                reader.readAsText(file);                // file表示File对象
+                reader.onload = function() {
+                    callback(reader.result);
+                }
+                reader.onerror = logerr;
+            }, logerr);
+        }, logerr);
+    }
+
+    /**
+     * 将指定的内容添加到指定路径的文件中，文件不存在则创建，完成后调用回调函数
+     */
+    function appendToFile(path, contents, callback) {
+        filesystem.root.getFile(path,
+            {create: true},                             // 如果不存在就创建
+            function(entry) {
+                entry.createWriter(function(writer) {
+                    writer.seek(writer.length);         // 移动到文件末尾
+                    var bb = new BlobBuilder();
+                    bb.append(contents);
+                    var blob = bb.getBlob();
+
+                    writer.write(blob);
+                    writer.onerror = logerr;
+
+                    if (callback) {
+                        writer.onwrite = callback;
+                    }
+                }, logerr);
+            }, logerr);
+    }
+
+    /**
+     * 删除指定的文件
+     */
+    function deleteFile(name, callback) {
+        filesystem.root.getFile(name, {}, function(entry) {
+            entry.remove(callback, logerr);
+        }, logerr);
+    }
+
+    /**
+     * 根据指定的名字创建一个新的目录
+     */
+    function makeDirectory(name, callback) {
+        filesystem.root.getDirectory(name, {        // 要创建的目录名称
+            create: true,                           // 如果不存在就创建
+            exclusive: true                         // 如果存在，则报错
+        }, callback, logerr);
+    }
+
+    /**
+     * 读取指定目录的内容，并以字符串数组的形式将内容传递给指定的回调函数
+     */
+    function listFiles(path, callback) {
+        // 如果指定的目录不存在，则列出根目录
+        // 否则，根据名字查找目录并将目录内容列出来(或者如果发生错误就记录错误)
+        if (!path) {
+            getFiles(filesystem.root);
+        } else {
+            filesystem.root.getDirectory(path, {}, getFiles, logerr);
+        }
+
+        function getFiles(dir) {
+            var reader = dir.createReader();        // 创建DirectoryReader对象
+            var list = [];
+
+            reader.readEntries(handleEntries, logerr);
+
+            function handleEntries(entries) {
+                if (entries.length == 0) {
+                    callback(list);
+                } else {
+                    for (var i = 0; i < entries.length; i++) {
+                        var name = entries[i].name;
+                        if (entries[i].isDirectory) name += "/";
+                        list.push(name);
+                    };
+                    // 获取下一批项
+                    reader.readEntries(handleEntries, logerr);
+                }
+            }
+        }
+    }
+
+    /* 使用异步文件系统API End */
 });
 </script>
