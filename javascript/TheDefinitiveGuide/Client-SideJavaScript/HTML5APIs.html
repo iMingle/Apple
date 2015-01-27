@@ -4,6 +4,20 @@
 	<meta charset="UTF-8">
 	<title>HTML5 APIs</title>
 	<script type="text/javascript" src="../../../scripts/jquery/jquery-1.11.1.js"></script>
+    <style>
+    *, body, html {
+        font-family: Microsoft YaHei;
+    }
+    /* Simple styles for the file drop target */
+    #droptarget {
+        border: solid black 2px;
+        width: 200px;
+        height: 200px;
+    }
+    #droptarget.active {
+        border: solid red 4px;
+    }
+    </style>
 </head>
 <body>
 	<div id="idLocation"></div>
@@ -11,7 +25,23 @@
     <div>
         <img src="../../../resources/images/beautiful0.jpg" alt="Guess" onclick="smear(this)">
     </div>
-    <input type="file" accept="./*" multiple onchange="fileinfo(this.files)">
+    <div>
+        <div>显示文件的基本信息:</div>
+        <input type="file" accept="./*" multiple onchange="fileinfo(this.files)">
+    </div>
+    <div>
+        <div>显示文件内容:</div>
+        <input type="file" onchange="readfile(this.files[0])">
+        <pre id="idFileOutput"></pre>
+    </div>
+    <div>
+        <div>读取文件前4个字节:</div>
+        <input type="file" onchange="typefile(this.files[0])">
+    </div>
+
+    <!-- 文档只定义文件拖放目标区域 -->
+    <div id="droptarget">Drop Image Files Here</div>
+    <div id="idFileImage"></div>
 </body>
 </html>
 
@@ -140,6 +170,74 @@ function fileinfo(files) {
     }
 }
 
+/**
+ * 使用XMLHttpRequest下载Blob
+ */
+function getBlob(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+    xhr.responseType = "blob";
+
+    xhr.onload = function() {
+        callback(xhr.response);
+    };
+    xhr.send(null);
+}
+
+/**
+ * 读取指定文本文件并将内容显示在下面的<pre>元素中
+ */
+function readfile(file) {
+    var reader = new FileReader();
+    reader.readAsText(file);
+
+    reader.onload = function() {
+        var text = reader.result;
+        var out = document.getElementById("idFileOutput");
+        out.innerHTML = "";
+        out.appendChild(document.createTextNode(text));
+    };
+
+    reader.onerror = function(e) {
+        console.info("Error:" + e);
+    };
+}
+
+/**
+ * 检测指定的blob的前4个字节
+ * 如果这个幻数标识文件的类型，那么就将其异步地设置成Blob的属性
+ */
+function typefile(file) {
+    var slice = file.slice(0, 4);
+    var reader = new FileReader();
+    reader.readAsArrayBuffer(file);
+
+    reader.onload = function() {
+        var buffer = reader.result;
+        var view = new DataView(buffer);
+        var magic = view.getUint32(0, false);                   // 以高位优先字节顺序，读取4个字节
+        
+        console.info(magic);
+
+        switch (magic) {                                        // 从中检测文件类型
+        case 0x89504E47:
+            file.verified_type = "image/png";
+            break;
+        case 0x47494638:
+            file.verified_type = "image/gif";
+            break;
+        case 0x25504446:
+            file.verified_type = "application/pdf";
+            break;
+        case 0x504b0304:
+            file.verified_type = "application/zip";
+            break;
+        }
+
+        console.info(file.name, file.verified_type);
+    };
+}
+
 $(function() {
 	$("#idLocation").append(getmap());
 
@@ -166,8 +264,66 @@ $(function() {
         asbytes[i] = i & 0xFF;
     }
 
-    var view = DataView(buf);
+    var view = new DataView(buf);
     console.info(view.getInt8(2));                  // 2
+
+    /* 构造Blob,BlobBuilder可能还没有实现 */
+/*    
+    var bb = new BlobBuilder();
+    bb.append('This blob contains this text and 10 big-endian 32-bit signed ints.')
+    bb.append('\0');                                // NULL
+    // 将数据存储到ArrayBuffer中
+    var ab = new ArrayBuffer(4 * 10);
+    var dv = new DataView(ab);
+
+    for (var i = 0; i < 10; i++) {
+        dv.setInt32(i * 4, i);
+    }
+    bb.append(ab);
+    var blob = bb.getBlob("x-optional/mime-type-here");
+*/
+    /* 用Blob URL来显示一个拖放的图片文件 Start */
+    var getBlobURL = (window.URL && URL.createObjectURL.bind(URL)) || (window.webkitURL && webkitURL.createObjectURL.bind(webkitURL)) || window.createObjectURL;
+    var revokeBlobURL = (window.URL && URL.revokeObjectURL.bind(URL)) || (window.webkitURL && webkitURL.revokeObjectURL.bind(webkitURL)) || window.revokeObjectURL;
+
+    var droptarget = $("#droptarget").get(0);
+
+    droptarget.ondragenter = function(e) {
+        var types = e.dataTransfer.types;
+        if (!types || (types.contains && types.contains("Files")) || (types.indexOf && types.indexOf("Files") != -1)) {
+            droptarget.classList.add('active');             // 高亮显示
+            return false;                                   // 阻止默认事件处理
+        }
+    }
+
+    droptarget.ondragleave = function() {
+        droptarget.classList.remove('active');             // 取消高亮显示
+    }
+
+    // 此处理程序只是通知浏览器继续发送提醒
+    droptarget.ondragover = function(e) {
+        return false;
+    }
+    // 当用户放下文件时，就获取他们的URL，并显示对应的缩略图
+    droptarget.ondrop = function(e) {
+        var files = e.dataTransfer.files;
+        for (var i = 0; i < files.length; i++) {
+            var type = files[i].type;
+            if (type.substring(0, 6) !== "image/") continue;
+
+            var img = document.createElement("img");
+            img.src = getBlobURL(files[i]);
+            img.onload = function() {
+                this.width = 100;
+                $("#idFileImage").append(this);
+                revokeBlobURL(this.src);
+            }
+        }
+
+        droptarget.classList.remove("active");
+        return false;
+    }
+    /* 用Blob URL来显示一个拖放的图片文件 End */
 
 
 });
