@@ -267,11 +267,10 @@ $(function() {
     var view = new DataView(buf);
     console.info(view.getInt8(2));                  // 2
 
-    /* 构造Blob,BlobBuilder可能还没有实现 */
-/*    
-    var bb = new BlobBuilder();
-    bb.append('This blob contains this text and 10 big-endian 32-bit signed ints.')
-    bb.append('\0');                                // NULL
+    /* 构造Blob,BlobBuilder已经废弃 */
+    window.BlobBuilder = window.MSBlobBuilder || window.MozBlobBuilder || window.WebKitBlobBuilder || window.BlobBuilder;
+    var blobArray = ["This blob contains this text and 10 big-endian 32-bit signed ints."];
+    
     // 将数据存储到ArrayBuffer中
     var ab = new ArrayBuffer(4 * 10);
     var dv = new DataView(ab);
@@ -279,9 +278,10 @@ $(function() {
     for (var i = 0; i < 10; i++) {
         dv.setInt32(i * 4, i);
     }
-    bb.append(ab);
-    var blob = bb.getBlob("x-optional/mime-type-here");
-*/
+
+    blobArray.push(ab);
+    var bb = new Blob(blobArray);
+
     /* 用Blob URL来显示一个拖放的图片文件 Start */
     var getBlobURL = (window.URL && URL.createObjectURL.bind(URL)) || (window.webkitURL && webkitURL.createObjectURL.bind(webkitURL)) || window.createObjectURL;
     var revokeBlobURL = (window.URL && URL.revokeObjectURL.bind(URL)) || (window.webkitURL && webkitURL.revokeObjectURL.bind(webkitURL)) || window.revokeObjectURL;
@@ -330,13 +330,42 @@ $(function() {
         console.info(e);
     }
 
+    function errorHandler(e) {
+        var msg = '';
+
+        switch (e.code) {
+        case FileError.QUOTA_EXCEEDED_ERR:
+            msg = 'QUOTA_EXCEEDED_ERR';
+            break;
+        case FileError.NOT_FOUND_ERR:
+            msg = 'NOT_FOUND_ERR';
+            break;
+        case FileError.SECURITY_ERR:
+            msg = 'SECURITY_ERR';
+            break;
+        case FileError.INVALID_MODIFICATION_ERR:
+            msg = 'INVALID_MODIFICATION_ERR';
+            break;
+        case FileError.INVALID_STATE_ERR:
+            msg = 'INVALID_STATE_ERR';
+            break;
+        default:
+            msg = 'Unknown Error';
+            break;
+        }
+
+        console.info(msg);
+    };
+
     var filesystem;
 
-    requestFileSystem(PERSISTENT,                   // 临时文件系统
+    window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
+
+    window.requestFileSystem(TEMPORARY,            // 或者采用用于缓存文件的临时(TEMPORARY)文件系统PERSISTENT
         10 * 1024 * 1024,                           // 10M
         function(fs) {
             filesystem = fs;                        // 将文件系统保存到一个全局变量中
-    }, logerr);
+    }, errorHandler);
 
     /**
      * 以文本形式读取指定文件的内容，并将他们传递给回调函数
@@ -430,6 +459,10 @@ $(function() {
             }
         }
     }
+
+    readTextFile("./LinkDetails.html", function(content) {
+        console.info(content);
+    });
 
     /* 使用异步文件系统API End */
 });
