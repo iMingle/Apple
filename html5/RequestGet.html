@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Request Get</title>
+</head>
+<body>
+	<!-- RequestGet.html?interest=Read&interest=PlayGame&interest=Movie&interest=Music&submit=Submit -->
+	<form action="RequestGet.html" method="get" accept-charset="utf-8">
+		读书<input type="checkbox" name="interest" value="Read">
+		玩游戏<input type="checkbox" name="interest" value="PlayGame">
+		电影<input type="checkbox" name="interest" value="Movie">
+		音乐<input type="checkbox" name="interest" value="Music">
+
+		<select name="score" multiple>
+			<option value="20">20</option>
+			<option value="40">40</option>
+			<option value="60">60</option>
+			<option value="80">80</option>
+			<option value="100">100</option>
+		</select>
+
+		<input type="submit" name="submit" value="Submit">
+	</form>
+</body>
+</html>
