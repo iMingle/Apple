@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>JsTree Test</title>
+	<link rel="stylesheet" type="text/css" href="../../scripts/jstree/themes/default/style.min.css">
+	<script src="../../scripts/jquery/jquery-1.11.1.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../scripts/jstree/jstree.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<div id="tree">
+		
+	</div>
+</body>
+</html>
+
+<script type="text/javascript">
+$(function () {
+	$('#tree').jstree({
+	'core' : {
+	    'data' : [
+	       { "id" : "ajson1", "parent" : "#", "text" : "Simple root node" },
+	       { "id" : "ajson3", "parent" : "ajson2", "text" : "Child 1" },
+	       { "id" : "ajson4", "parent" : "ajson2", "text" : "Child 2" },
+	       { "id" : "ajson2", "parent" : "#", "text" : "Root node 2" },	// 可以将父节点置于子节点之后
+	    ]
+	} });
+});
+</script>
