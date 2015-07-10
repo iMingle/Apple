@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jqGrid</title>
+	<!-- The link to the CSS that the grid needs -->
+    <link rel="stylesheet" type="text/css" media="screen" href="../../scripts/jqgrid/css/ui.jqgrid.css" />
+
+	<script src="../../scripts/jquery/jquery-1.11.1.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../scripts/jqgrid/src/i18n/grid.locale-cn.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../scripts/jqgrid/src/jquery.jqGrid.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<input type="button" value="Edit in Batch Mode" onclick="startEdit()" />
+    <input type="button" value="Save All Rows" onclick="saveRows()" />
+
+	<br /><br />
+
+	<table id="jqGrid"></table>
+    <div id="jqGridPager"></div>
+</body>
+</html>
+
+<script type="text/javascript">
+$(function () {
+	$("#jqGrid").jqGrid({
+        url: 'data.json',
+        editurl: 'clientArray',
+        datatype: "json",
+        colModel: [
+            {
+				label: "Employee ID",
+                name: 'EmployeeID',
+                width: 75
+            },
+            {
+				label: "First Name",
+                name: 'FirstName',
+                width: 140,
+                editable: true // must set editable to true if you want to make the field editable
+            },
+            {
+				label: "Last Name",
+                name: 'LastName',
+                width: 100,
+                editable: true
+            },
+            {
+				label : "City",
+                name: 'City',
+                width: 120,
+                editable: true
+            }
+        ],
+		sortname: 'EmployeeID',
+		loadonce : true,
+		viewrecords: true,
+        width: 780,
+        height: 200,
+        rowNum: 10,
+        pager: "#jqGridPager"
+    });
+
+    $("#jqGrid").setCell(1, 1, "Mingle");
+});
+
+function startEdit() {
+    var grid = $("#jqGrid");
+    var ids = grid.jqGrid('getDataIDs');
+
+    for (var i = 0; i < ids.length; i++) {
+        grid.jqGrid('editRow',ids[i]);
+    }
+}
+
+function saveRows() {
+    var grid = $("#jqGrid");
+    var ids = grid.jqGrid('getDataIDs');
+
+    for (var i = 0; i < ids.length; i++) {
+        grid.jqGrid('saveRow', ids[i]);
+    }
+}
+</script>
