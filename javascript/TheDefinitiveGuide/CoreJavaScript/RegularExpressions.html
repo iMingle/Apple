@@ -57,4 +57,10 @@ while((result = pattern.exec(text)) != null) {
 }
 console.info(pattern.test("JavaScript"));				// true
 console.info(pattern.test("javascript"));				// false
+
+console.info("---------------------------------------------");
+console.info("IP校验");
+pattern = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/;
+console.info(pattern.test("258.0.0.0"));				// true
+console.info(RegExp.$1);								// 258
 </script>
