@@ -5,6 +5,7 @@
 	<title>jqGrid</title>
 	<!-- The link to the CSS that the grid needs -->
     <link rel="stylesheet" type="text/css" media="screen" href="../../scripts/jqgrid/css/ui.jqgrid.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="../../scripts/jqgrid/css/ui.jqgrid-bootstarp.css" />
 
 	<script src="../../scripts/jquery/jquery-1.11.1.js" type="text/javascript" charset="utf-8"></script>
     <script src="../../scripts/jqgrid/src/i18n/grid.locale-cn.js" type="text/javascript" charset="utf-8"></script>
@@ -25,7 +26,7 @@
 $(function () {
 	$("#jqGrid").jqGrid({
         url: 'data.json',
-        editurl: 'clientArray',
+        // editurl: 'clientArray',
         datatype: "json",
         colModel: [
             {
