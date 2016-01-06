@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Test</title>
+	<style type="text/css" media="screen">
+	#menu {
+		font-family: Arial;
+		font-size: 14px;
+		width: 500px;
+		overflow: hidden;
+	}
+
+	#menu, #menu ul {
+		list-style-type: none;
+		background: #A3C159;
+		margin: 0;
+		padding: 0;
+	}
+
+	#menu li {
+		float: left;
+	}
+
+	#menu li a {
+		display: block;
+		padding: 10px 15px;
+		color: #FFF;
+		text-decoration: none;
+		border-right: 1px solid #FFF;
+	}
+	#menu li a:hover {
+		background: #1BA6B2;
+	}
+
+	#menu li ul li {
+		float: none;
+	}
+
+	#menu li ul li a {
+		border-top: 1px solid #FFF;
+	}
+
+	#menu li ul {
+		display: none;
+		position: absolute;
+	}
+
+	#menu li:hover ul {
+		display: block;
+	}
+</style>
+</head>
+<body>
+	<ul id="menu">
+	<li>
+		<a href="#">Menu 1</a>
+		<ul>
+			<li>
+				<a href="#">Menu 1-1</a>
+			</li>
+			<li>
+				<a href="#">Menu 1-2</a>
+			</li>
+			<li>
+				<a href="#">Menu 1-3</a>
+			</li>
+		</ul>
+	</li>
+	<li>
+		<a href="#">Menu 2</a>
+		<ul>
+			<li>
+				<a href="#">Menu 2-1</a>
+			</li>
+			<li>
+				<a href="#">Menu 2-2</a>
+			</li>
+			<li>
+				<a href="#">Menu 2-3</a>
+			</li>
+		</ul>
+	</li>
+	<li>
+		<a href="#">Menu 3</a>
+		<ul>
+			<li>
+				<a href="#">Menu 3-1</a>
+			</li>
+			<li>
+				<a href="#">Menu 3-2</a>
+			</li>
+			<li>
+				<a href="#">Menu 3-3</a>
+			</li>
+		</ul>
+	</li>
+</ul>
+</body>
+</html>
