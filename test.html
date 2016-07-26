@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script type="text/javascript" src="scripts/jquery/jquery-1.11.1.js"></script>
+    <script type="text/javascript" src="scripts/utils/ajax.js"></script>
+</head>
+<body>
+    <div>
+        <div></div>
+        <div></div>
+        <div class="cls1 cls2 cls3" id="idClick" onclick="javascript:alert(123);">Click</div>
+    </div>
+</body>
+</html>
+
+<script>
+$(function() {
+  $.getJSON("data/json.json", function(data) {
+    console.info(data);
+  });
+
+  // Ajax.readFile("data/json.json");
+
+  $.getJSON( "http://smart-ip.net/geoip-json?callback=?", function(data) {
+    alert(data.host); 
+  });
+});
+</script>
