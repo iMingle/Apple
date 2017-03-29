@@ -1,0 +1,23 @@
+{
+  "name": "gulptest",
+  "version": "1.0.0",
+  "description": "gulp test",
+  "main": "gulpfile.js",
+  "devDependencies": {
+    "browser-sync": "^2.18.8",
+    "gulp": "^3.9.1",
+    "gulp-connect": "^5.0.0",
+    "gulp-less": "^3.3.0",
+    "gulp-livereload": "^3.8.1",
+    "gulp-notify": "^3.0.0",
+    "tiny-lr": "^1.0.3"
+  },
+  "scripts": {
+    "test": "gulp watch"
+  },
+  "keywords": [
+    "gulp"
+  ],
+  "author": "mingle",
+  "license": "ISC"
+}

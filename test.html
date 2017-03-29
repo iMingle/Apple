@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <script type="text/javascript" src="scripts/jquery/jquery-1.11.1.js"></script>
-    <script type="text/javascript" src="scripts/utils/ajax.js"></script>
 </head>
 <body>
     <div>
@@ -17,14 +16,23 @@
 
 <script>
 $(function() {
-  $.getJSON("data/json.json", function(data) {
-    console.info(data);
-  });
+    function Subject() {
+        this.observers = new Array();
+    }
 
-  // Ajax.readFile("data/json.json");
+    function f() {
 
-  $.getJSON( "http://smart-ip.net/geoip-json?callback=?", function(data) {
-    alert(data.host); 
-  });
+    }
+
+    Subject.prototype = f;
+
+    console.info(Subject.prototype);
+    Subject.prototype.aaa = function() {
+
+    };
+    console.info(Subject.prototype.prototype.prototype);
+
+    var a = new Object();
+    console.info(a.prototype);
 });
 </script>
