@@ -1,6 +1,5 @@
 var gulp = require('gulp'),
     less = require('gulp-less'),
-    lr = require('tiny-lr'),
     notify = require('gulp-notify'),
     browserSync = require('browser-sync').create();
 
