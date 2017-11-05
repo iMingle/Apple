@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ES7 Test</title>
+</head>
+<body>
+</body>
+</html>
+
+<script>
+    /** Array.prototype.includes（value：任意值）： boolean */
+    console.info(['a', 'b', 'c'].includes('a')); // true
+    console.info(['a', 'b', 'c'].includes('d')); // false
+    /** 唯一的区别是 includes() 方法能找到 NaN，而 indexOf() 不行 */
+    console.info([NaN].includes(NaN)); // true
+    console.info([NaN].indexOf(NaN)); // -1
+    console.info([-0].includes(+0)); // true
+    let tarr = Uint8Array.of(12, 5, 3);
+    console.info(tarr.includes(5)); // true
+
+    /** 指数运算符 */
+    console.info(2 ** 4); // 16
+    console.info(Math.pow(2, 4));
+
+    /** 异步函数 */
+    let data = '../data/data.json';
+
+    let headers = new Headers({
+        "Content-Type": "application/json"
+    });
+
+    let init = {
+        method: 'GET',
+        headers: headers,
+        mode: 'cors',
+        cache: 'default'
+    };
+
+    function fetchJsonAsync0(url) {
+        return fetch(url, init)
+            .then(request => request.text())
+            .then(text => {
+                return JSON.parse(text);
+            })
+            .catch(error => {
+                console.info(`ERROR: ${error.stack}`);
+            });
+    }
+
+    fetchJsonAsync0(data).then(obj => console.info(obj));
+
+    async function fetchJsonAsync(url) {
+        try {
+            let request = await fetch(url, headers);
+            let text = await request.text();
+            return JSON.parse(text);
+        }
+        catch (error) {
+            console.info(`ERROR: ${error.stack}`);
+        }
+    }
+
+    fetchJsonAsync(data).then(obj => console.info(obj));
+</script>
