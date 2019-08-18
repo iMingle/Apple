@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    <script type="text/javascript" src="../scripts/vue/vue.js"></script>
+</head>
+<body>
+<div id="app">
+    {{ product }}
+</div>
+</body>
+</html>
+
+<script>
+    const app = new Vue({
+        el: '#app',
+        data: {
+            product: 'Apple',
+            ws: null
+        },
+        created() {
+            this.initWebSocket()
+        },
+        methods: {
+            initWebSocket() {
+                this.ws = new WebSocket('ws://mingle.local:8080/');
+
+                this.ws.onopen = this.websocketonopen;
+                this.ws.onclose = this.websocketonclose;
+                this.ws.onmessage = this.websocketonmessage;
+            },
+            websocketonopen() {
+                document.body.style.backgroundColor = '#cfc';
+            },
+            websocketonclose() {
+                document.body.style.backgroundColor = null;
+            },
+            websocketonmessage(event) {
+                this.product = event.data;
+            }
+        }
+    });
+</script>

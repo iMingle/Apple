@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Client-Side Storage</title>
+	<script type="text/javascript" src="../../scripts/jquery/jquery-1.11.1.js"></script>
+</head>
+<body>
+	<div id="idAjaxLoad"></div>
+</body>
+</html>
+
+<script type="text/javascript">
+$(function() {
+	var name = localStorage.username;						// = localStorage["username"]
+	if (!name) {
+		name = window.prompt("What is your name?");
+		localStorage.username = name;
+	}
+
+	for (var name in localStorage) {
+		var value = localStorage[name];
+	}
+
+	localStorage.setItem("x", 1);
+	console.info("x = " + localStorage.getItem("x"));
+
+	for (var i = 0; i < localStorage.length; i++) {
+		var name = localStorage.key(i);
+		var value = localStorage.getItem(name);
+	}
+
+	localStorage.removeItem("x");
+	localStorage.clear();
+
+	for (var name in localStorage) {
+		var value = localStorage[name];
+	}
+
+	// test window.onstorage事件
+	$("#idAjaxLoad").load('./Client-SideStorageEvent.html',{
+	param1: "value1", param2: "value2"} ,
+		function(){
+		/* Stuff to do after the page is loaded */
+	});
+	
+	function setcookie(name, value, daysToLive) {
+		var cookie = name + "=" + window.encodeURIComponent(value);
+		if (typeof daysToLive === "number") {
+			cookie += "; max-age=" + (daysToLive * 60 * 60 * 24);
+		}
+		document.cookie = cookie;
+	};
+
+	function getcookie() {
+		var cookie = {};
+		var all = document.cookie;
+
+		if (all === "") return cookie;
+
+		var list = all.split("; ");
+		for (var i = 0; i < list.length; i++) {
+			var c = list[i];
+			var p = c.indexOf("=");
+			var name = c.substring(0, p);
+			var value = c.substring(p + 1);
+			var value = window.decodeURIComponent(value);
+			cookie[name] = value;
+		}
+
+		return cookie;
+	};
+
+	setcookie("email", "jinminglei@yeah.net", 0.1);
+	setcookie("password", "password", 0.1);
+
+	var cookies = getcookie();
+
+	console.info(cookies);	//  Object { username="mingle", password="password", email="jinminglei@yeah.net"}
+
+	console.info(new Date().toUTCString());
+});
+</script>

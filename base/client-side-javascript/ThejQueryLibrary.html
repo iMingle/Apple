@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>The jQuery Library</title>
+	<script type="text/javascript" src="../../scripts/jquery/jquery-1.11.1.js"></script>
+</head>
+<body>
+	<div id="idPosition">Position</div>
+	<div id="idData">Data Function</div>
+	<div id="idWrap">Wrap Element</div>
+	<div id="idImage"></div>
+	<div id="idBindEvent">Bind Event</div>
+	<div>
+		<button id="idTrigger" type="button">Trigger Event</button>
+	</div>
+	<div>
+		<button id="idEventNamespace" type="button">EventType has namespace</button>
+	</div>
+	<div id="idNotExist"></div>
+	<div id="idFadeIn">Fade In</div>
+	<div id="idFadeOut">Fade Out</div>
+	<div id="idFadeInOut">Fade In Out</div>
+	<div id="idAnimate">Animate</div>
+	<!-- 缓动函数 -->
+	<div id="idEasing">Easing Function</div>
+	<div id="idAjaxLoad"></div>
+</body>
+</html>
+
+<script type="text/javascript">
+$(function() {
+	var bodyscripts = $("script", document.body);
+	console.info(bodyscripts.selector);					// script
+	console.info(bodyscripts.context);					// <body>
+	console.info(bodyscripts.jquery);					// 1.11.1
+
+	console.info("---------------------------------------------");
+	var elt = $("#idPosition");
+	var position = elt.offset();						// 相对于文档元素
+	console.info(position);								//  Object { top=8, left=8}
+	elt.offset(position);
+	elt.offset(function() {
+		return {top: 10, left: 10};
+	});
+
+	console.info("---------------------------------------------");
+	$("#idData").data('x', '1');
+	console.info($("#idData").data('x'));				// 1
+	$("#idData").removeData('x');
+	console.info($("#idData").data('x'));				// undefined
+
+	$.data(document.getElementById("idData"), 'x', '2');
+	console.info($("#idData").data('x'));				// 2
+
+	console.info("---------------------------------------------");
+	$("#idWrap").wrap('<div class="out-wrapper"></div>');
+	$("#idWrap").wrapInner('<div class="in-wrapper"></div>');
+
+	console.info("---------------------------------------------");
+	$(window).resize(function(event) {
+		console.info("I am resizing!");
+	});
+
+	$("<img/>", {
+		src: "../../../resources/images/beautiful0.jpg",
+		alt: "image description",
+		click: function() {
+			$(this).css('opacity', '20%').css('border', 'solid black 6px');
+		}
+	}).appendTo($("#idImage"));
+
+	console.info("---------------------------------------------");
+	$("#idBindEvent").bind('mouseenter', "data", function(event) {
+		$(this).css('color', 'red');
+		console.info(event.data);
+	});
+
+	$("#idTrigger").click(function(event) {
+		$.event.trigger('event');
+		window.location = "DigitalClock.html";
+	});
+
+	$("#idEventNamespace").bind('click.ns', "eventData", function(event) {
+		console.info($(this).text());
+	});
+
+	$("#idEventNamespace").trigger('click.ns');
+	
+	$(".notExist").bind('click', "eventData", function(event) {			// not bind
+		console.info("Bind event to the element created dynamic");
+	});
+
+	$(document).delegate('.notExist', 'click', function(event) {		// binded
+		console.info("Delegate event to the element created dynamic");
+	});
+
+	$("<div/>").addClass('notExist').text('Dynamic created').appendTo('#idNotExist');
+
+	console.info("---------------------------------------------");
+	$("#idFadeIn").hide();
+/*	
+	$("#idFadeIn").fadeIn(3000, function() {
+		$(this).text('Faded In End');
+	});
+*/
+	$("#idFadeIn").fadeIn({
+		duration: 3000,
+		complete: function() {
+			$(this).text('Faded In End');
+		}
+	});
+
+	$("#idFadeOut").fadeOut(3000, function() {
+		$(this).text('Faded Out End');
+	});
+
+	$("#idFadeInOut").fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn();
+
+	$("#idAnimate").animate({
+		"opacity": .25,
+		"font-size": 10											// 有'-'必须加上引号
+	}, {
+		duration: 3000,
+		complete: function() {
+			$(this).text('Animate End');
+		}
+	});
+
+	$("#idEasing").animate({"font-size": "+=5"}, {duration: 10000, easing: "swing"});	// 正弦函数
+
+	console.info("---------------------------------------------");
+	$("#idAjaxLoad").load('./ThejQueryAjaxServer.html #idAjaxLoad');
+	$("#idAjaxLoad").load('./ThejQueryAjaxServer.html', "name=mingle");					// GET
+	$("#idAjaxLoad").load('./ThejQueryAjaxServer.html', {name: "mingle", age: 26});		// POST
+
+	$.getScript("../../../scripts/TheDefinitiveGuide/jqueryAjaxGetScript.js", function() {
+		console.info("5 + 5 = " + add(5, 5));
+	});
+
+	$.getScript("../../../scripts/TheDefinitiveGuide/jqueryAjaxGetScript.js").done(function(script, textStatus) {
+		console.info(textStatus);						// success
+	}).fail(function(jqxhr, settings, exception) {
+		console.info("Triggered ajaxError handler.");
+	});
+
+	$.getJSON('../../../resources/documents/jqueryAjax.json', {person: 'x-man'}, function(json, textStatus) {
+		console.info(json);								//  Object { name="mingle", age="26"}
+		console.info(textStatus);						// success
+	});
+
+});
+</script>

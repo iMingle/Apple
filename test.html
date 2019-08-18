@@ -2,51 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
-    <script type="text/javascript" src="scripts/jquery/jquery-1.11.1.js"></script>
+    <title>Test</title>
 </head>
 <body>
-    <div>
-        <div></div>
-        <div></div>
-        <div class="cls1 cls2 cls3" id="idClick" onclick="javascript:alert(123);">Click</div>
-    </div>
 </body>
 </html>
 
 <script>
-$(function() {
-    function Subject() {
-        this.observers = [];
+    function doSomething() {
+        let promise = new Promise(function (resolve, reject) {
+        });
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://coolshell.cn/', true);
+
+        xhr.onload = function (e) {
+            if (this.status === 200) {
+                results = JSON.parse(this.responseText);
+                promise.resolve(results); // 成功时，调用 resolve() 方法
+            }
+        };
+
+        xhr.onerror = function (e) {
+            promise.reject(e); // 失败时，调用 reject() 方法
+        };
+
+        xhr.send();
+        return promise;
     }
 
-    function f() {
-
-    }
-
-    Subject.prototype = f;
-
-    console.info(Subject.prototype);
-    Subject.prototype.aaa = function() {};
-    console.info(Subject.prototype.prototype);
-    console.info(Subject.prototype.prototype.prototype);
-
-    var a = {};
-    console.info(a.prototype);
-
-    console.info(0.3 * 100 - 0.2 * 100);
-
-    var s = 'string';
-    var s1 = String('String');
-    var r = /^a$/;
-
-    console.info(typeof s);
-    console.info(typeof s1);
-    console.info(typeof r);
-
-    var s = 1;
-    for (var i = 0; i < s + 1; i++) {
-        console.info(i);
-    }
-});
+    doSomething();
 </script>

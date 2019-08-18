@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Scripting Documents</title>
+</head>
+<body>
+	<div id="idElement">ID</div>
+	<div name="nameElement">Name</div>
+	<div name="nameElement">Name</div>
+	<div name="nameElement">Name</div>
+	<span>Span</span>
+	<span>Span</span>
+	<image>Image</image>
+	<image>Image</image>
+	<form action="ScriptingDocuments_submit" method="get" accept-charset="utf-8">Form1</form>
+	<form action="ScriptingDocuments_submit" method="get" accept-charset="utf-8">Form2</form>
+	<a href="" title="">href1</a>
+	<a href="" title="">href2</a>
+	<embed src="" type="">Embed1</embed>
+	<embed src="" type="">Embed2</embed>
+	<div class="classElement">Class1</div>
+	<div class="classElement">Class2</div>
+	<div class="classElement classElement1">Class2</div>
+
+	<div>PreviousSibling</div>
+	<div id="idParent">
+		<div id="idFirstChild">FirstChild</div>
+		<div id="idMiddleChild">MiddleChild</div>
+		<div id="idLastChild">LastChild</div>
+	</div>
+	<div>NextSibling</div>
+	<div id="idAttribute" style="font-size: 24px;">Attribute</div>
+	<span class="sparkline" data-ymin="0" data-ymax="10">
+		1 1 1 2 2 3 4 5 5 4 3 5 6 7 7 4 2 1
+	</span>
+	<div id="idAttributes" style="font-size: 24px;" name="Attributes">Attributes</div>
+	<div id="idInnerOuter" style="font-size: 24px;" name="Attributes">InnerOuter</div>
+	<div id="idNodeValue">NodeValue</div>
+	<div id="idShape">Shape</div>
+	<!-- 可编辑的内容 -->
+	<div id="idEditor" contenteditable>Click to edit</div>
+</body>
+</html>
+
+<script type="text/javascript">
+console.info(document.getElementById("idElement"));
+
+console.info("---------------------------------------------");
+console.info(document.getElementsByName("nameElement"));	// NodeList[div, div, div]
+
+console.info("---------------------------------------------");
+console.info(document.getElementsByTagName("span"));		// HTMLCollection[span, span]
+console.info(document.images);								// HTMLCollection[img, img]
+console.info(document.forms);								// HTMLCollection[form Scripting...s_submit, form Scripting...s_submit]
+console.info(document.links);								// HTMLCollection[a, a]
+console.info(document.embeds);								// HTMLCollection[embed, embed]
+console.info(document.plugins);								// HTMLCollection[embed, embed]
+console.info(document.scripts);								// HTMLCollection[script]
+console.info(document.body);								// <body>
+console.info(document.head);								// <head>
+
+console.info("---------------------------------------------");
+console.info(document.getElementsByClassName("classElement"));	// HTMLCollection[div.classElement, div.classElement]
+console.info(document.getElementsByClassName("classElement classElement1"));	// HTMLCollection[div.classElement.classElement1]
+
+console.info("---------------------------------------------");
+var parent = document.querySelectorAll("#idParent")[0];
+console.info(parent);										// <div id="idParent">
+console.info(parent.parentNode);							// <body>
+console.info(parent.childNodes);
+console.info(parent.firstChild);
+console.info(parent.lastChild);
+console.info(parent.nextSibling);
+console.info(parent.previousSibling);
+console.info(parent.nodeType);
+console.info(parent.nodeValue);
+console.info(parent.nodeName);
+
+console.info("---------------------------------------------");
+console.info(parent.children);								// HTMLCollection[div, div, div]
+console.info(parent.firstElementChild);
+console.info(parent.lastElementChild);
+console.info(parent.nextElementSibling);
+console.info(parent.previousElementSibling);
+console.info(parent.childElementCount);						// 3
+
+console.info("---------------------------------------------");
+/**
+ * 返回Element元素e的第n层祖先
+ */
+function parentF(e, n) {
+	if (n === undefined) n = 1;
+
+	while (n-- && e) {
+		e = e.parentNode;
+	}
+
+	if (!e || e.nodeType !== 1) return null;
+
+	return e;
+}
+
+/**
+ * 返回Element元素e的第n个兄弟元素
+ */
+function siblingF(e, n) {
+	while (e && n !== 0) {
+		if (n > 0) {						// 查找后续的兄弟元素
+			if (e.nextElementSibling) {
+				e = e.nextElementSibling;
+			} else {
+				for (e = e.nextSibling; e && e.nodeType !== 1; e = e.nextSibling)
+					;						// 空循环
+			}
+			n--;
+		} else {							// 查找前面的兄弟元素
+			if (e.previousElementSibling) {
+				e = e.previousElementSibling;
+			} else {
+				for (e = e.previousSibling; e && e.nodeType !== 1; e = e.previousSibling)
+					;						// 空循环
+			}
+			n++;
+		}
+	}
+
+	return e;
+}
+
+/**
+ * 返回Element元素e的第n代子元素
+ */
+function childF(e, n) {
+	if (e.children) {
+		if (n < 0) n += e.children.length;
+		if (n < 0) return null;
+
+		return e.children[n];
+	}
+
+	// 如果e没有children数组
+	if (n >= 0) {
+		if (e.firstElementChild) {
+			e = e.firstElementChild;
+		} else {
+			for (e = e.firstChild; e && e.nodeType !== 1; e = e.nextSibling)
+				;
+		}
+
+		return sibling(e, n);
+	} else {
+		if (e.lastElementChild) {
+			e = e.lastElementChild;
+		} else {
+			for (e = e.lastChild; e && e.nodeType !== 1; e = e.previousSibling)
+				;
+		}
+
+		return sibling(e, n + 1);
+	}
+}
+
+console.info(parentF(document.getElementById("idFirstChild"), 2));	// <body>
+console.info(siblingF(document.getElementById("idFirstChild"), 2));	// <div id="idLastChild">
+console.info(childF(document.getElementById("idParent"), 0));		// <div id="idFirstChild">
+
+console.info("---------------------------------------------");
+document.getElementById("idAttribute").setAttribute("style", "color: #138E16;");
+console.info(document.getElementById("idAttribute").getAttribute("style"));
+
+console.info("---------------------------------------------");
+var sparklines = document.getElementsByClassName("sparkline");
+for (var i = 0; i < sparklines.length; i++) {
+	var dataset = sparklines[i].dataset;
+	var ymin = parseFloat(dataset.ymin);
+	var ymax = parseFloat(dataset.ymax);
+	var data = sparklines[i].textContent.split(" ").map(parseFloat);
+	console.info("ymin = " + ymin);									// 0
+	console.info("ymax = " + ymax);									// 10
+	console.info("data = " + data);									// 1,1,1,2,2,3,4,5,5,4,3,5,6,7,7,4,2,1
+}
+
+console.info("---------------------------------------------");
+console.info(document.getElementById("idAttributes").attributes);	//  [name="Attributes", style="font-size: 24px;", id="idAttributes"]
+
+console.info("---------------------------------------------");
+console.info(document.getElementById("idInnerOuter").innertText);	// IE
+console.info(document.getElementById("idInnerOuter").innerHTML);
+console.info(document.getElementById("idInnerOuter").outerHTML);
+
+console.info("---------------------------------------------");
+console.info(document.getElementsByTagName("script"));
+
+console.info("---------------------------------------------");
+console.info(document.getElementById("idNodeValue").firstChild.nodeValue);	// NodeValue
+
+console.info("---------------------------------------------");
+console.info(window.pageXOffset);
+console.info(window.pageYOffset);
+// 标准模式
+console.info(document.documentElement.scrollLeft);
+console.info(document.documentElement.scrollTop);
+// 怪异模式
+console.info(document.body.scrollLeft);
+console.info(document.body.scrollTop);
+
+console.info("---------------------------------------------");
+var shapeBox = document.getElementById("idShape").getBoundingClientRect();
+console.info(shapeBox);
+for (var shape in shapeBox) {
+	console.info(shape + " = " + shapeBox[shape]);
+}
+
+console.info("---------------------------------------------");
+console.info(document.elementFromPoint(40, 40));					//  <div id="idAttribute" style="color: #138E16;">	不常使用
+
+console.info("---------------------------------------------");
+console.info(document.documentElement);								// <html lang="en">
+console.info(document.cookie);										// (空字符串)
+console.info(document.domain);										// (空字符串)
+console.info(document.lastModified);								// 12/28/2014 17:32:07
+console.info(document.location);
+// referrer表示浏览器导航到当前链接的上一个文档
+console.info(document.referrer);									// (空字符串)
+console.info(document.title);										// Scripting Documents
+console.info(document.URL);											// file:///E:/Workspace/Git/GitHub/Apple/javascript/TheDefinitiveGuide/client-side-javascript/ScriptingDocuments.html
+
+console.info("---------------------------------------------");
+/**
+ * 查询选取的文本
+ */
+function getSelectedText() {
+	if (window.getSelection) {
+		return window.getSelection().toString();
+	} else if (document.selection) {
+		return document.selection.createRange().text;
+	}
+}
+
+document.addEventListener("mousedown", function(e) {
+	if (3 == e.which) {
+		alert(getSelectedText());
+	}
+}, false);
+
+</script>
